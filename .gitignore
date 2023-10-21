@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 *.xlsx
 ~$EPS TO INSTALL EXAM BRANCH PORTAL.docx
+UpdateServer.bat
+*temp
+*.tmp
+*.txt
