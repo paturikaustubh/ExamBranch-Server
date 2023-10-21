@@ -28,4 +28,5 @@ UpdateServer.bat
 *temp
 *.tmp
 *.txt
-*.bat
+*SyncServer.bat
+*UpdateServer.bat
