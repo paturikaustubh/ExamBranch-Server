@@ -1,5 +1,5 @@
 CREATE DATABASE practice;
-GRANT ALL PRIVILEGES ON practice.* TO "root"@"localhost";
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 FLUSH PRIVILEGES;
 USE practice;
 
@@ -130,7 +130,5 @@ CREATE TABLE users (
 );
 
 INSERT INTO users VALUES ("admin", "6d6587811555580ab1b4f4c440dd612f");
-
-DESC costs;
 
 INSERT INTO costs VALUES (900, 200, 1800, 1000, 200, 100, 500, 200, 300, 400, "12/12/2022", "12/12/2022", "12/12/2022", "12/12/2022");
