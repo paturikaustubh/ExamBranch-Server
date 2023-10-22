@@ -1,4 +1,4 @@
-rollno,subcode,subname,grade,acyear,sem,exyear,exmonth,gradepoint,credits,ocredits
+rollNo,subCode,subName,grade,acYear,sem,exYear,exMonth,gradePoint,credits,ocredits
 15R11A0157,16CE3103,EH,F,3,1,2022,5,0,,
 15R11A0157,16CE3201,DSS,F,3,2,2021,12,,,
 15R11A0157,16CE3202,FE,F,3,2,2021,12,,,

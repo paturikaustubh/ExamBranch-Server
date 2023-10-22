@@ -51,7 +51,7 @@ CREATE TABLE paidCBT (
     regDate VARCHAR(12),
     branch VARCHAR(12),
     user VARCHAR(12),
-    PRIMARY KEY (rollno , subCode)
+    PRIMARY KEY (rollNo , subCode)
 );
 
 CREATE TABLE paidReEvaluation (
@@ -63,7 +63,7 @@ CREATE TABLE paidReEvaluation (
     regDate VARCHAR(12),
     stat CHAR(1),
     user VARCHAR(20),
-    PRIMARY KEY (rollno , subCode)
+    PRIMARY KEY (rollNo , subCode)
 );
 
 CREATE TABLE paidSupply (
@@ -107,7 +107,7 @@ CREATE TABLE printCBT (
     acYear INT,
     sem INT,
     regDate VARCHAR(12),
-    bracha VARCHAR(12),
+    brach VARCHAR(12),
     user VARCHAR(20),
     PRIMARY KEY (rollNo , subCode)
 );
@@ -115,7 +115,7 @@ CREATE TABLE printCBT (
 CREATE TABLE studentInfo (rollNo VARCHAR(15), subCode VARCHAR(15), subName VARCHAR(15), grade VARCHAR(3), acYear INT, sem INT, exYear INT, exMonth INT, gradePoint INT, credits INT, orCredits INT, json JSON, PRIMARY KEY (rollNo, subCode));
 
 CREATE TABLE subCred (
-    subCodr VARCHAR(15),
+    subCode VARCHAR(15),
     credits INT
 );
 
@@ -129,6 +129,9 @@ CREATE TABLE users (
     password VARCHAR(50)
 );
 
-INSERT INTO users VALUES ("admin", "6d6587811555580ab1b4f4c440dd612f");
+-- INSERT INTO users VALUES ("admin", "6d6587811555580ab1b4f4c440dd612f");
 
-INSERT INTO costs VALUES (900, 200, 1800, 1000, 200, 100, 500, 200, 300, 400, "12/12/2022", "12/12/2022", "12/12/2022", "12/12/2022");
+-- INSERT INTO costs VALUES (900, 200, 1800, 1000, 200, 100, 500, 200, 300, 400, "12/12/2022", "12/12/2022", "12/12/2022", "12/12/2022");
+
+ALTER TABLE printCBT RENAME COLUMN bracha TO branch;
+ALTER TABLE subCred RENAME COLUMN subCodr TO subCode;

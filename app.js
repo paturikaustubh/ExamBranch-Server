@@ -6,10 +6,10 @@ const fastcsv = require("fast-csv");
 const fs = require("fs");
 const csvtojson = require("csvtojson");
 const multer = require("multer");
-var datetime = require("node-datetime");
 app.use(express.json());
 app.use(cors());
 const md5 = require("md5-nodejs");
+const dayjs = require("dayjs");
 
 const db = mysql.createConnection({
   user: "root",
@@ -23,13 +23,12 @@ let downLoc = "..\\Downloads\\";
 
 //LOG!!
 var messageIp = (mess, ip) => {
-  var dt = datetime.create();
-  dt = dt.format("Y-m-d  H:M:S");
-  db.query(`select username from userip where ip="${ip}"`, (_err, result) => {
+  var dt = dayjs().format("D-MMM-YYYY hh:mm:ss A");
+  db.query(`select userName from userip where ip="${ip}"`, (_err, result) => {
     if (result) {
       fs.appendFile(
         "log.txt",
-        "\n[" + dt + ']\t"' + result[0]["username"] + '" ' + mess + ip,
+        "\n[" + dt + ']\t"' + result[0]["userName"] + '" ' + mess + ip,
         function (_er) {}
       );
     }
@@ -37,16 +36,15 @@ var messageIp = (mess, ip) => {
 };
 
 var messtrunk = (ip, name) => {
-  var dt = datetime.create();
-  dt = dt.format("Y-m-d  H:M:S");
-  db.query(`select username from userip where ip="${ip}"`, (_err, result) => {
+  var dt = dayjs().format("D-MMM-YYYY hh:mm:ss A");
+  db.query(`select userName from userip where ip="${ip}"`, (_err, result) => {
     if (result) {
       fs.appendFile(
         "log.txt",
         "\n[" +
           dt +
           ']\t"' +
-          result[0]["username"] +
+          result[0]["userName"] +
           '" truncated ' +
           name +
           " from " +
@@ -57,21 +55,20 @@ var messtrunk = (ip, name) => {
   });
 };
 
-var message = (rollno, mess, ip) => {
-  var dt = datetime.create();
-  dt = dt.format("Y-m-d  H:M:S");
+var message = (rollNo, mess, ip) => {
+  var dt = dayjs().format("D-MMM-YYYY hh:mm:ss A");
   try {
-    db.query(`select username from userip where ip="${ip}"`, (_err, result) => {
+    db.query(`select userName from userip where ip="${ip}"`, (_err, result) => {
       if (result) {
         fs.appendFile(
           "log.txt",
           "\n[" +
             dt +
             ']\t"' +
-            result[0]["username"] +
+            result[0]["userName"] +
             '" ' +
             mess +
-            rollno +
+            rollNo +
             " from " +
             ip,
           function (_er) {}
@@ -82,17 +79,16 @@ var message = (rollno, mess, ip) => {
 };
 
 var upMessage = (fname, ip, type) => {
-  var dt = datetime.create();
-  dt = dt.format("Y-m-d  H:M:S");
+  var dt = dayjs().format("D-MMM-YYYY hh:mm:ss A");
   try {
-    db.query(`select username from userip where ip="${ip}"`, (_err, result) => {
+    db.query(`select userName from userip where ip="${ip}"`, (_err, result) => {
       if (result) {
         fs.appendFile(
           "log.txt",
           "\n[" +
             dt +
             ']\t"' +
-            result[0]["username"] +
+            result[0]["userName"] +
             '" uploaded  ' +
             type +
             fname +
@@ -106,17 +102,16 @@ var upMessage = (fname, ip, type) => {
 };
 
 var downMessage = (table, ip) => {
-  var dt = datetime.create();
-  dt = dt.format("Y-m-d  H:M:S");
+  var dt = dayjs().format("D-MMM-YYYY hh:mm:ss A");
   try {
-    db.query(`select username from userip where ip="${ip}"`, (_err, result) => {
+    db.query(`select userName from userip where ip="${ip}"`, (_err, result) => {
       if (result) {
         fs.appendFile(
           "log.txt",
           "\n[" +
             dt +
             ']\t"' +
-            result[0]["username"] +
+            result[0]["userName"] +
             '" downloaded ' +
             table +
             " from " +
@@ -142,7 +137,7 @@ app.post("/Storeregular", (req, res) => {
 app.post("/DownBack", (req, res) => {
   const ws = fs.createWriteStream(`${downLoc}\\backup.csv`);
   db.query(`select * from studentinfo`, (err, result) => {
-    const data = JSON.parse(JSON.stringify(result));
+    let data = JSON.parse(JSON.stringify(result));
 
     fastcsv
       .write(data, { headers: true })
@@ -172,18 +167,18 @@ app.post("/UpBack", (req, res) => {
           csvtojson()
             .fromFile(`${loc}\\${fname}`)
             .then((s) => {
-              let rno = Object.keys(s[0])[0]; //ROLLNO
-              let code = Object.keys(s[0])[1]; //SUBCODE
-              let sname = Object.keys(s[0])[2]; //SUBNAME
+              let rno = Object.keys(s[0])[0]; //rollNo
+              let code = Object.keys(s[0])[1]; //subCode
+              let sname = Object.keys(s[0])[2]; //subName
               let grade = Object.keys(s[0])[3]; //GRADE
-              let acyr = Object.keys(s[0])[4]; //ACYEAR
+              let acyr = Object.keys(s[0])[4]; //acYear
               let sem = Object.keys(s[0])[5]; //SEM
               let exyr = Object.keys(s[0])[6]; //EXYEAR
               let exmo = Object.keys(s[0])[7]; //EXMONTH
 
               s.forEach((e) => {
                 db.query(
-                  `insert ignore into studentinfo (rollno, subcode, subname, grade, acyear, sem, exyear, exmonth) values ("${e[rno]}", "${e[code]}", "${e[sname]}", "${e[grade]}", ${e[acyr]}, ${e[sem]}, ${e[exyr]}, ${e[exmo]})`,
+                  `insert ignore into studentinfo (rollNo, subCode, subName, grade, acYear, sem, exYear, exMonth) values ("${e[rno]}", "${e[code]}", "${e[sname]}", "${e[grade]}", ${e[acyr]}, ${e[sem]}, ${e[exyr]}, ${e[exmo]})`,
                   (err, _result) => {
                     try {
                       count++;
@@ -216,10 +211,10 @@ app.post("/UpBack", (req, res) => {
 });
 
 app.post("/UpdateRegular", (req, res) => {
-  const acyear = req.body.acyear;
+  const acYear = req.body.acYear;
   const sem = req.body.sem;
-  const exyear = req.body.exyear;
-  const exmonth = req.body.exmonth;
+  const exYear = req.body.exYear;
+  const exMonth = req.body.exMonth;
   const loc = req.body.loc.replaceAll("\\", "\\\\");
   let filesRead = 0;
   let totalFiles = 0;
@@ -245,29 +240,29 @@ app.post("/UpdateRegular", (req, res) => {
         csvtojson()
           .fromFile(`${loc}\\${fname}`)
           .then((s) => {
-            let subcode = Object.keys(s[0])[1].split("-")[0];
-            let subname = Object.keys(s[0])[1].split("-")[1];
+            let subCode = Object.keys(s[0])[1].split("-")[0];
+            let subName = Object.keys(s[0])[1].split("-")[1];
             let grade = Object.keys(s[0])[1];
             let count = 0;
             console.log("Uploading ", fname);
             db.query(
-              `SELECT * FROM codenames where subcode = "${subcode}" and subname = "${subname}"`,
+              `SELECT * FROM codenames where subCode = "${subCode}" and subName = "${subName}"`,
               (err, result) => {
                 if (err) {
                   console.log(err);
                 } else if (result.length > 0) {
                   s.forEach((e) => {
                     if (
-                      typeof subname === "string" &&
-                      typeof subcode === "string" &&
-                      Object.keys(s[0])[0] === "rollno"
+                      typeof subName === "string" &&
+                      typeof subCode === "string" &&
+                      Object.keys(s[0])[0] === "rollNo"
                     ) {
                       if (e[grade] === "Ab") {
                         e[grade] = "F";
                       }
 
                       db.query(
-                        `insert ignore into studentinfo(rollno,subcode,subname,grade,acyear,sem,exyear,exmonth) values("${e["rollno"]}","${subcode}","${subname}","${e[grade]}",${acyear},${sem},${exyear},${exmonth});`,
+                        `insert ignore into studentinfo(rollNo,subCode,subName,grade,acYear,sem,exYear,exMonth) values("${e["rollNo"]}","${subCode}","${subName}","${e[grade]}",${acYear},${sem},${exYear},${exMonth});`,
                         (err, _result) => {
                           try {
                             count++;
@@ -277,7 +272,7 @@ app.post("/UpdateRegular", (req, res) => {
                               if (filesRead === totalFiles) {
                                 console.log("Error files", erfile);
                                 db.query(
-                                  `update studentinfo stu inner join grades g on stu.grade=g.grade set stu.gradepoint=g.gradepoint;`,
+                                  `update studentinfo stu inner join grades g on stu.grade=g.grade set stu.gradePoint=g.gradePoint;`,
                                   (err, result) => {
                                     if (err) {
                                       console.log(err);
@@ -287,7 +282,7 @@ app.post("/UpdateRegular", (req, res) => {
                                   }
                                 );
                                 db.query(
-                                  `update studentinfo stu inner join subcred g on stu.subcode=g.subcode set stu.credits=stu.gradepoint*g.credits;`,
+                                  `update studentinfo stu inner join subcred g on stu.subCode=g.subCode set stu.credits=stu.gradePoint*g.credits;`,
                                   (err, result) => {
                                     if (err) {
                                       console.log(err);
@@ -356,10 +351,10 @@ app.post("/Storesupply", (req, res) => {
 
 app.post("/UpdateSupply", (req, res) => {
   // console.log(req.body)
-  const acyear = req.body.acyear;
+  const acYear = req.body.acYear;
   const sem = req.body.sem;
-  const exyear = req.body.exyear;
-  const exmonth = req.body.exmonth;
+  const exYear = req.body.exYear;
+  const exMonth = req.body.exMonth;
   const loc = req.body.loc.replaceAll("\\", "\\\\");
   let filesRead = 0;
   let totalFiles = 0;
@@ -385,17 +380,17 @@ app.post("/UpdateSupply", (req, res) => {
           .fromFile(`${loc}\\${fname}`)
           .then((s) => {
             // console.log(Object.keys(s[1], "SSS"))
-            let subcode = Object.keys(s[0])[1].split("-")[0];
-            let subname = Object.keys(s[0])[1].split("-")[1];
+            let subCode = Object.keys(s[0])[1].split("-")[0];
+            let subName = Object.keys(s[0])[1].split("-")[1];
             let grade = Object.keys(s[0])[1];
             let count = 0;
             s.forEach((e) => {
-              console.log(subcode, subname, e["rollno"], e[grade]);
-              if (typeof subcode === "string" && typeof subname === "string") {
+              console.log(subCode, subName, e["rollNo"], e[grade]);
+              if (typeof subCode === "string" && typeof subName === "string") {
                 console.log("Inside if");
                 if (e[grade] !== "") {
                   db.query(
-                    `replace into studentinfo (rollno, grade, exyear, exmonth, subcode, subname, acyear, sem) values("${e["rollno"]}","${e[grade]}",${exyear}, ${exmonth},"${subcode}","${subname}",${acyear},${sem});`,
+                    `replace into studentinfo (rollNo, grade, exYear, exMonth, subCode, subName, acYear, sem) values("${e["rollNo"]}","${e[grade]}",${exYear}, ${exMonth},"${subCode}","${subName}",${acYear},${sem});`,
                     (err, _result) => {
                       try {
                         if (err) {
@@ -410,7 +405,7 @@ app.post("/UpdateSupply", (req, res) => {
                           if (filesRead === totalFiles) {
                             console.log("Error files", erfiles);
                             db.query(
-                              `update studentinfo stu inner join grades g on stu.grade=g.grade set stu.gradepoint=g.gradepoint;`,
+                              `update studentinfo stu inner join grades g on stu.grade=g.grade set stu.gradePoint=g.gradePoint;`,
                               (err, result) => {
                                 if (err) {
                                   console.log(err);
@@ -420,7 +415,7 @@ app.post("/UpdateSupply", (req, res) => {
                               }
                             );
                             db.query(
-                              `update studentinfo stu inner join subcred g on stu.subcode=g.subcode set stu.credits=stu.gradepoint*g.credits;`,
+                              `update studentinfo stu inner join subcred g on stu.subCode=g.subCode set stu.credits=stu.gradePoint*g.credits;`,
                               (err, result) => {
                                 if (err) {
                                   console.log(err);
@@ -486,20 +481,20 @@ app.post("/UpdatePaidSupple", (req, res) => {
         csvtojson()
           .fromFile(`${loc}\\${fname}`)
           .then((s) => {
-            let rollno = Object.keys(s[0])[0];
-            let subcode = Object.keys(s[0])[1];
-            let subname = Object.keys(s[0])[2];
+            let rollNo = Object.keys(s[0])[0];
+            let subCode = Object.keys(s[0])[1];
+            let subName = Object.keys(s[0])[2];
             let year = Object.keys(s[0])[3];
             let sem = Object.keys(s[0])[4];
-            let regdate = Object.keys(s[0])[5];
+            let regDate = Object.keys(s[0])[5];
             let user = Object.keys(s[0])[6];
             let count = 0;
             s.forEach((e) => {
               console.log(e);
-              if (typeof subcode === "string" && typeof subname === "string") {
+              if (typeof subCode === "string" && typeof subName === "string") {
                 if (true) {
                   db.query(
-                    `insert ignore into paidsupply (rollno, subcode, subname, acyear, sem, regdate, user) values("${e[rollno]}", "${e[subcode]}", "${e[subname]}", ${e[year]}, ${e[sem]}, "${e[regdate]}", "${e[user]}");`,
+                    `insert ignore into paidsupply (rollNo, subCode, subName, acYear, sem, regDate, user) values("${e[rollNo]}", "${e[subCode]}", "${e[subName]}", ${e[year]}, ${e[sem]}, "${e[regDate]}", "${e[user]}");`,
                     (err, _result) => {
                       try {
                         if (err) {
@@ -574,19 +569,21 @@ app.post("/UpdatePaidReval", (req, res) => {
         csvtojson()
           .fromFile(`${loc}\\${fname}`)
           .then((s) => {
-            let rollno = Object.keys(s[0])[0];
-            let subcode = Object.keys(s[0])[1];
-            let subname = Object.keys(s[0])[2];
+            let rollNo = Object.keys(s[0])[0];
+            let subCode = Object.keys(s[0])[1];
+            let subName = Object.keys(s[0])[2];
             let year = Object.keys(s[0])[3];
             let sem = Object.keys(s[0])[4];
-            let regdate = Object.keys(s[0])[5];
+            let regDate = Object.keys(s[0])[5];
             let stat = Object.keys(s[0])[6];
+            let user = Object.keys(s[0])[7];
+
             let count = 0;
             s.forEach((e) => {
-              if (typeof subcode === "string" && typeof subname === "string") {
+              if (typeof subCode === "string" && typeof subName === "string") {
                 if (true) {
                   db.query(
-                    `insert ignore into paidreevaluation (rollno, subcode, subname, acyear, sem, regdate, stat) values("${e[rollno]}","${e[subcode]}","${e[subname]}", ${e[year]},${e[sem]},"${e[regdate]}", "${e[stat]}");`,
+                    `insert ignore into paidreevaluation (rollNo, subCode, subName, acYear, sem, regDate, stat, user) values("${e[rollNo]}","${e[subCode]}","${e[subName]}", ${e[year]},${e[sem]},"${e[regDate]}", "${e[stat]}", "${e[user]}");`,
                     (err, _result) => {
                       try {
                         if (err) {
@@ -659,20 +656,21 @@ app.post("/UpdatePaidCbt", (req, res) => {
         csvtojson()
           .fromFile(`${loc}\\${fname}`)
           .then((s) => {
-            let rollno = Object.keys(s[0])[0];
-            let subcode = Object.keys(s[0])[1];
-            let subname = Object.keys(s[0])[2];
+            let rollNo = Object.keys(s[0])[0];
+            let subCode = Object.keys(s[0])[1];
+            let subName = Object.keys(s[0])[2];
             let year = Object.keys(s[0])[3];
             let sem = Object.keys(s[0])[4];
-            let regdate = Object.keys(s[0])[5];
-            let branch = Object.keys(s[0])[6];
+            let branch = Object.keys(s[0])[5];
+            let regDate = Object.keys(s[0])[6];
+            let user = Object.keys(s[0])[7];
             let count = 0;
             s.forEach((e) => {
-              // console.log(subcode, subname, e["rollno"], e[grade])
-              if (typeof subcode === "string" && typeof subname === "string") {
+              // console.log(subCode, subName, e["rollNo"], e[grade])
+              if (typeof subCode === "string" && typeof subName === "string") {
                 if (true) {
                   db.query(
-                    `insert ignore into paidcbt (rollno, subcode, subname, acyear, sem, regdate, branch) values("${e[rollno]}","${e[subcode]}","${e[subname]}", ${e[year]},${e[sem]},"${e[regdate]}", "${e[branch]}");`,
+                    `insert ignore into paidcbt (rollNo, subCode, subName, acYear, sem, regDate, branch, user) values("${e[rollNo]}","${e[subCode]}","${e[subName]}", ${e[year]},${e[sem]},"${e[regDate]}", "${e[branch]}", "${e[user]}");`,
                     (err, _result) => {
                       try {
                         if (err) {
@@ -734,15 +732,15 @@ app.post("/printSupply", (req, res) => {
 
   A.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",1,1, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,1, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 console.log(err);
@@ -756,15 +754,15 @@ app.post("/printSupply", (req, res) => {
   });
   B.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",1,2, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,2, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -779,15 +777,15 @@ app.post("/printSupply", (req, res) => {
   C.forEach((element) => {
     console.log(element);
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",2,1, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,1, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 console.log(err);
@@ -802,15 +800,15 @@ app.post("/printSupply", (req, res) => {
 
   D.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",2,2, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,2, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -824,15 +822,15 @@ app.post("/printSupply", (req, res) => {
 
   E.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",3,1, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,1, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -846,15 +844,15 @@ app.post("/printSupply", (req, res) => {
 
   F.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",3,2, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,2, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -868,15 +866,15 @@ app.post("/printSupply", (req, res) => {
 
   G.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",4,1, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,1, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -890,15 +888,15 @@ app.post("/printSupply", (req, res) => {
 
   H.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",4,2, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,2, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -929,15 +927,15 @@ app.post("/Registersupply", (req, res) => {
 
   A.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",1,1, curdate(), (select username from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,1, curdate(), (select userName from userip where ip = "${ip}"))`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -951,15 +949,15 @@ app.post("/Registersupply", (req, res) => {
 
   B.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",1,2, curdate(), (select username from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,2, curdate(), (select userName from userip where ip = "${ip}"))`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -973,15 +971,15 @@ app.post("/Registersupply", (req, res) => {
 
   C.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",2,1, curdate(), (select username from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,1, curdate(), (select userName from userip where ip = "${ip}"))`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -995,15 +993,15 @@ app.post("/Registersupply", (req, res) => {
 
   D.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",2,2, curdate(), (select username from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,2, curdate(), (select userName from userip where ip = "${ip}"))`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -1017,15 +1015,15 @@ app.post("/Registersupply", (req, res) => {
 
   E.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",3,1, curdate(), (select username from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,1, curdate(), (select userName from userip where ip = "${ip}"))`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -1039,15 +1037,15 @@ app.post("/Registersupply", (req, res) => {
 
   F.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",3,2, curdate(), (select username from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,2, curdate(), (select userName from userip where ip = "${ip}"))`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -1061,15 +1059,15 @@ app.post("/Registersupply", (req, res) => {
 
   G.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",4,1, curdate(), (select username from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,1, curdate(), (select userName from userip where ip = "${ip}"))`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -1083,15 +1081,15 @@ app.post("/Registersupply", (req, res) => {
 
   H.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",4,2, curdate(), (select username from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,2, curdate(), (select userName from userip where ip = "${ip}"))`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -1103,7 +1101,7 @@ app.post("/Registersupply", (req, res) => {
     );
   });
   message(rno, "has registered Supply for ", ip);
-  db.query(`delete from printsupply where rollno = '${rno}';`);
+  db.query(`delete from printsupply where rollNo = '${rno}';`);
   res.send({ registered: true });
 });
 
@@ -1111,17 +1109,17 @@ app.post("/Supplysearch", (req, res) => {
   const rno = req.body.rno;
   const gr = req.body.gr;
   let ans = [];
-  let subnames = [];
-  let subcodes = [];
+  let subNames = [];
+  let subCodes = [];
   let mapper = {};
   let value = 0;
 
   db.query(
-    `select subname from printsupply where rollno = '${rno}';`,
+    `select subName from printsupply where rollNo = '${rno}';`,
     (_err, result) => {
       if (result.length > 0) {
         db.query(
-          `select subcode, subname from printsupply where rollno ='${rno}' and acyear = 1 and sem = 1;`,
+          `select subCode, subName from printsupply where rollNo ='${rno}' and acYear = 1 and sem = 1;`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1129,19 +1127,19 @@ app.post("/Supplysearch", (req, res) => {
               let tempSubs = [];
               let tempCodes = [];
               result.forEach((e) => {
-                tempSubs.push(e.subname);
-                tempCodes.push(e.subcode);
-                mapper[e.subcode] = e.subname;
+                tempSubs.push(e.subName);
+                tempCodes.push(e.subCode);
+                mapper[e.subCode] = e.subName;
               });
-              subnames.push({ A: tempSubs });
-              subcodes.push({ A: tempCodes });
+              subNames.push({ A: tempSubs });
+              subCodes.push({ A: tempCodes });
               ans.push({ A: result });
               value = value + result.length;
             }
           }
         );
         db.query(
-          `select subcode, subname from printsupply where rollno ='${rno}' and acyear = 1 and sem = 2;`,
+          `select subCode, subName from printsupply where rollNo ='${rno}' and acYear = 1 and sem = 2;`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1149,12 +1147,12 @@ app.post("/Supplysearch", (req, res) => {
               let tempSubs = [];
               let tempCodes = [];
               result.forEach((e) => {
-                tempSubs.push(e.subname);
-                tempCodes.push(e.subcode);
-                mapper[e.subcode] = e.subname;
+                tempSubs.push(e.subName);
+                tempCodes.push(e.subCode);
+                mapper[e.subCode] = e.subName;
               });
-              subnames.push({ B: tempSubs });
-              subcodes.push({ B: tempCodes });
+              subNames.push({ B: tempSubs });
+              subCodes.push({ B: tempCodes });
 
               ans.push({ B: result });
               value = value + result.length;
@@ -1162,7 +1160,7 @@ app.post("/Supplysearch", (req, res) => {
           }
         );
         db.query(
-          `select subcode, subname from printsupply where rollno ='${rno}' and acyear = 2 and sem = 1;`,
+          `select subCode, subName from printsupply where rollNo ='${rno}' and acYear = 2 and sem = 1;`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1170,12 +1168,12 @@ app.post("/Supplysearch", (req, res) => {
               let tempSubs = [];
               let tempCodes = [];
               result.forEach((e) => {
-                tempSubs.push(e.subname);
-                tempCodes.push(e.subcode);
-                mapper[e.subcode] = e.subname;
+                tempSubs.push(e.subName);
+                tempCodes.push(e.subCode);
+                mapper[e.subCode] = e.subName;
               });
-              subnames.push({ C: tempSubs });
-              subcodes.push({ C: tempCodes });
+              subNames.push({ C: tempSubs });
+              subCodes.push({ C: tempCodes });
 
               ans.push({ C: result });
               value = value + result.length;
@@ -1183,7 +1181,7 @@ app.post("/Supplysearch", (req, res) => {
           }
         );
         db.query(
-          `select subcode, subname from printsupply where rollno ='${rno}' and acyear = 2 and sem = 2;`,
+          `select subCode, subName from printsupply where rollNo ='${rno}' and acYear = 2 and sem = 2;`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1191,12 +1189,12 @@ app.post("/Supplysearch", (req, res) => {
               let tempSubs = [];
               let tempCodes = [];
               result.forEach((e) => {
-                tempSubs.push(e.subname);
-                tempCodes.push(e.subcode);
-                mapper[e.subcode] = e.subname;
+                tempSubs.push(e.subName);
+                tempCodes.push(e.subCode);
+                mapper[e.subCode] = e.subName;
               });
-              subnames.push({ D: tempSubs });
-              subcodes.push({ D: tempCodes });
+              subNames.push({ D: tempSubs });
+              subCodes.push({ D: tempCodes });
 
               ans.push({ D: result });
               value = value + result.length;
@@ -1204,7 +1202,7 @@ app.post("/Supplysearch", (req, res) => {
           }
         );
         db.query(
-          `select subcode, subname from printsupply where rollno ='${rno}' and acyear = 3 and sem = 1;`,
+          `select subCode, subName from printsupply where rollNo ='${rno}' and acYear = 3 and sem = 1;`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1212,12 +1210,12 @@ app.post("/Supplysearch", (req, res) => {
               let tempSubs = [];
               let tempCodes = [];
               result.forEach((e) => {
-                tempSubs.push(e.subname);
-                tempCodes.push(e.subcode);
-                mapper[e.subcode] = e.subname;
+                tempSubs.push(e.subName);
+                tempCodes.push(e.subCode);
+                mapper[e.subCode] = e.subName;
               });
-              subnames.push({ E: tempSubs });
-              subcodes.push({ E: tempCodes });
+              subNames.push({ E: tempSubs });
+              subCodes.push({ E: tempCodes });
 
               ans.push({ E: result });
               value = value + result.length;
@@ -1225,7 +1223,7 @@ app.post("/Supplysearch", (req, res) => {
           }
         );
         db.query(
-          `select subcode, subname from printsupply where rollno ='${rno}' and acyear = 3 and sem = 2;`,
+          `select subCode, subName from printsupply where rollNo ='${rno}' and acYear = 3 and sem = 2;`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1233,19 +1231,19 @@ app.post("/Supplysearch", (req, res) => {
               let tempSubs = [];
               let tempCodes = [];
               result.forEach((e) => {
-                tempSubs.push(e.subname);
-                tempCodes.push(e.subcode);
-                mapper[e.subcode] = e.subname;
+                tempSubs.push(e.subName);
+                tempCodes.push(e.subCode);
+                mapper[e.subCode] = e.subName;
               });
-              subnames.push({ F: tempSubs });
-              subcodes.push({ F: tempCodes });
+              subNames.push({ F: tempSubs });
+              subCodes.push({ F: tempCodes });
               ans.push({ F: result });
               value = value + result.length;
             }
           }
         );
         db.query(
-          `select subcode, subname from printsupply where rollno ='${rno}' and acyear = 4 and sem = 1;`,
+          `select subCode, subName from printsupply where rollNo ='${rno}' and acYear = 4 and sem = 1;`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1253,12 +1251,12 @@ app.post("/Supplysearch", (req, res) => {
               let tempSubs = [];
               let tempCodes = [];
               result.forEach((e) => {
-                tempSubs.push(e.subname);
-                tempCodes.push(e.subcode);
-                mapper[e.subcode] = e.subname;
+                tempSubs.push(e.subName);
+                tempCodes.push(e.subCode);
+                mapper[e.subCode] = e.subName;
               });
-              subnames.push({ G: tempSubs });
-              subcodes.push({ G: tempCodes });
+              subNames.push({ G: tempSubs });
+              subCodes.push({ G: tempCodes });
 
               ans.push({ G: result });
               value = value + result.length;
@@ -1266,7 +1264,7 @@ app.post("/Supplysearch", (req, res) => {
           }
         );
         db.query(
-          `select subcode, subname from printsupply where rollno ='${rno}' and acyear = 4 and sem = 2;`,
+          `select subCode, subName from printsupply where rollNo ='${rno}' and acYear = 4 and sem = 2;`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1274,12 +1272,12 @@ app.post("/Supplysearch", (req, res) => {
               let tempSubs = [];
               let tempCodes = [];
               result.forEach((e) => {
-                tempSubs.push(e.subname);
-                tempCodes.push(e.subcode);
-                mapper[e.subcode] = e.subname;
+                tempSubs.push(e.subName);
+                tempCodes.push(e.subCode);
+                mapper[e.subCode] = e.subName;
               });
-              subnames.push({ H: tempSubs });
-              subcodes.push({ H: tempCodes });
+              subNames.push({ H: tempSubs });
+              subCodes.push({ H: tempCodes });
 
               ans.push({ H: result });
               value = value + result.length;
@@ -1287,8 +1285,8 @@ app.post("/Supplysearch", (req, res) => {
             ans.push({ printTab: true });
             ans.unshift({ I: value });
             res.send({
-              subnames,
-              subcodes,
+              subNames,
+              subCodes,
               mapper,
               printTab: true,
               value,
@@ -1299,7 +1297,7 @@ app.post("/Supplysearch", (req, res) => {
       } else {
         //1 sem 1
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidsupply p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.grade ="${gr}" and t.acyear=1 and t.sem=1 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidsupply p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.grade ="${gr}" and t.acYear=1 and t.sem=1 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1309,12 +1307,12 @@ app.post("/Supplysearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ A: tempSubs });
-                  subcodes.push({ A: tempCodes });
+                  subNames.push({ A: tempSubs });
+                  subCodes.push({ A: tempCodes });
                   ans.push({ A: result });
                   value = value + result.length;
                 }
@@ -1325,7 +1323,7 @@ app.post("/Supplysearch", (req, res) => {
 
         //1 sem 2
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidsupply p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.grade ="${gr}" and t.acyear=1 and t.sem=2 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidsupply p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.grade ="${gr}" and t.acYear=1 and t.sem=2 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1335,12 +1333,12 @@ app.post("/Supplysearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ B: tempSubs });
-                  subcodes.push({ B: tempCodes });
+                  subNames.push({ B: tempSubs });
+                  subCodes.push({ B: tempCodes });
                   ans.push({ B: result });
                   value = value + result.length;
                 }
@@ -1352,7 +1350,7 @@ app.post("/Supplysearch", (req, res) => {
 
         //2 sem 1
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidsupply p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.grade ="${gr}" and t.acyear=2 and t.sem=1 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidsupply p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.grade ="${gr}" and t.acYear=2 and t.sem=1 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1362,12 +1360,12 @@ app.post("/Supplysearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ C: tempSubs });
-                  subcodes.push({ C: tempCodes });
+                  subNames.push({ C: tempSubs });
+                  subCodes.push({ C: tempCodes });
                   ans.push({ C: result });
                   value = value + result.length;
                 }
@@ -1378,7 +1376,7 @@ app.post("/Supplysearch", (req, res) => {
 
         //2 sem 2
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidsupply p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.grade ="${gr}" and t.acyear=2 and t.sem=2 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidsupply p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.grade ="${gr}" and t.acYear=2 and t.sem=2 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1388,12 +1386,12 @@ app.post("/Supplysearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ D: tempSubs });
-                  subcodes.push({ D: tempCodes });
+                  subNames.push({ D: tempSubs });
+                  subCodes.push({ D: tempCodes });
                   ans.push({ D: result });
                   value = value + result.length;
                 }
@@ -1404,7 +1402,7 @@ app.post("/Supplysearch", (req, res) => {
 
         //3 sem 1
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidsupply p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.grade ="${gr}" and t.acyear=3 and t.sem=1 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidsupply p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.grade ="${gr}" and t.acYear=3 and t.sem=1 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1414,12 +1412,12 @@ app.post("/Supplysearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ E: tempSubs });
-                  subcodes.push({ E: tempCodes });
+                  subNames.push({ E: tempSubs });
+                  subCodes.push({ E: tempCodes });
                   ans.push({ E: result });
                   value = value + result.length;
                 }
@@ -1430,7 +1428,7 @@ app.post("/Supplysearch", (req, res) => {
 
         //3 sem 2
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidsupply p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.grade ="${gr}" and t.acyear=3 and t.sem=2 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidsupply p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.grade ="${gr}" and t.acYear=3 and t.sem=2 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1440,12 +1438,12 @@ app.post("/Supplysearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ F: tempSubs });
-                  subcodes.push({ F: tempCodes });
+                  subNames.push({ F: tempSubs });
+                  subCodes.push({ F: tempCodes });
                   ans.push({ F: result });
                   value = value + result.length;
                 }
@@ -1456,7 +1454,7 @@ app.post("/Supplysearch", (req, res) => {
 
         //4 sem 1
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidsupply p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.grade ="${gr}" and t.acyear=4 and t.sem=1 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidsupply p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.grade ="${gr}" and t.acYear=4 and t.sem=1 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1466,12 +1464,12 @@ app.post("/Supplysearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ G: tempSubs });
-                  subcodes.push({ G: tempCodes });
+                  subNames.push({ G: tempSubs });
+                  subCodes.push({ G: tempCodes });
                   ans.push({ G: result });
                   value = value + result.length;
                 }
@@ -1482,7 +1480,7 @@ app.post("/Supplysearch", (req, res) => {
 
         //4 sem 2
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidsupply p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.grade ="${gr}" and t.acyear=4 and t.sem=2 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidsupply p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.grade ="${gr}" and t.acYear=4 and t.sem=2 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               res.send({ err: err });
@@ -1492,20 +1490,20 @@ app.post("/Supplysearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ H: tempSubs });
-                  subcodes.push({ H: tempCodes });
+                  subNames.push({ H: tempSubs });
+                  subCodes.push({ H: tempCodes });
                   ans.push({ H: result });
                   value = value + result.length;
                 }
                 ans.push({ printTab: false });
-                // console.log(subcodes, subnames, mapper)
+                // console.log(subCodes, subNames, mapper)
                 res.send({
-                  subnames,
-                  subcodes,
+                  subNames,
+                  subCodes,
                   mapper,
                   printTab: false,
                   value,
@@ -1524,20 +1522,20 @@ app.post("/Supplysearch", (req, res) => {
 
 app.post("/Revalsearch", (req, res) => {
   const rno = req.body.rno;
-  const exmonth = req.body.exmonth;
-  const exyear = req.body.exyear;
-  let subnames = [];
-  let subcodes = [];
+  const exMonth = req.body.exMonth;
+  const exYear = req.body.exYear;
+  let subNames = [];
+  let subCodes = [];
   let mapper = {};
+  let availableSems = [];
   let value = 0;
-  let k = "";
 
   db.query(
-    `select subname from printreval where rollno = '${rno}';`,
+    `select subName from printreval where rollNo = '${rno}';`,
     (_err, result) => {
       if (result.length > 0) {
         db.query(
-          `select subcode, subname from printreval where rollno ='${rno}' and acyear = 1 and sem = 1;`,
+          `select subCode, subName from printreval where rollNo ='${rno}' and acYear = 1 and sem = 1;`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1547,21 +1545,21 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ A: tempSubs });
-                  subcodes.push({ A: tempCodes });
+                  subNames.push({ A: tempSubs });
+                  subCodes.push({ A: tempCodes });
                   value = value + result.length;
-                  k = "A";
+                  availableSems.push({ code: "A", sem: "1-1" });
                 }
               }
             }
           }
         );
         db.query(
-          `select subcode, subname from printreval where rollno ='${rno}' and acyear = 1 and sem = 2;`,
+          `select subCode, subName from printreval where rollNo ='${rno}' and acYear = 1 and sem = 2;`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1571,21 +1569,24 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ B: tempSubs });
-                  subcodes.push({ B: tempCodes });
+                  subNames.push({ B: tempSubs });
+                  subCodes.push({ B: tempCodes });
                   value = value + result.length;
-                  k = "B";
+                  availableSems.push({
+                    code: "B",
+                    sem: "1-2",
+                  });
                 }
               }
             }
           }
         );
         db.query(
-          `select subcode, subname from printreval where rollno ='${rno}' and acyear = 2 and sem = 1;`,
+          `select subCode, subName from printreval where rollNo ='${rno}' and acYear = 2 and sem = 1;`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1595,21 +1596,24 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ C: tempSubs });
-                  subcodes.push({ C: tempCodes });
+                  subNames.push({ C: tempSubs });
+                  subCodes.push({ C: tempCodes });
                   value = value + result.length;
-                  k = "C";
+                  availableSems.push({
+                    code: "C",
+                    sem: "-1",
+                  });
                 }
               }
             }
           }
         );
         db.query(
-          `select subcode, subname from printreval where rollno ='${rno}' and acyear = 2 and sem = 2;`,
+          `select subCode, subName from printreval where rollNo ='${rno}' and acYear = 2 and sem = 2;`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1619,21 +1623,24 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ D: tempSubs });
-                  subcodes.push({ D: tempCodes });
+                  subNames.push({ D: tempSubs });
+                  subCodes.push({ D: tempCodes });
                   value = value + result.length;
-                  k = "D";
+                  availableSems.push({
+                    code: "D",
+                    sem: "2-2",
+                  });
                 }
               }
             }
           }
         );
         db.query(
-          `select subcode, subname from printreval where rollno ='${rno}' and acyear = 3 and sem = 1;`,
+          `select subCode, subName from printreval where rollNo ='${rno}' and acYear = 3 and sem = 1;`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1643,21 +1650,24 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ E: tempSubs });
-                  subcodes.push({ E: tempCodes });
+                  subNames.push({ E: tempSubs });
+                  subCodes.push({ E: tempCodes });
                   value = value + result.length;
-                  k = "E";
+                  availableSems.push({
+                    code: "E",
+                    sem: "3-1",
+                  });
                 }
               }
             }
           }
         );
         db.query(
-          `select subcode, subname from printreval where rollno ='${rno}' and acyear = 3 and sem = 2;`,
+          `select subCode, subName from printreval where rollNo ='${rno}' and acYear = 3 and sem = 2;`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1667,21 +1677,24 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ F: tempSubs });
-                  subcodes.push({ F: tempCodes });
+                  subNames.push({ F: tempSubs });
+                  subCodes.push({ F: tempCodes });
                   value = value + result.length;
-                  k = "F";
+                  availableSems.push({
+                    code: "F",
+                    sem: "3-2",
+                  });
                 }
               }
             }
           }
         );
         db.query(
-          `select subcode, subname from printreval where rollno ='${rno}' and acyear = 4 and sem = 1;`,
+          `select subCode, subName from printreval where rollNo ='${rno}' and acYear = 4 and sem = 1;`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1691,21 +1704,24 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ G: tempSubs });
-                  subcodes.push({ G: tempCodes });
+                  subNames.push({ G: tempSubs });
+                  subCodes.push({ G: tempCodes });
                   value = value + result.length;
-                  k = "G";
+                  availableSems.push({
+                    code: "G",
+                    sem: "4-1",
+                  });
                 }
               }
             }
           }
         );
         db.query(
-          `select subcode, subname from printreval where rollno ='${rno}' and acyear = 4 and sem = 2;`,
+          `select subCode, subName from printreval where rollNo ='${rno}' and acYear = 4 and sem = 2;`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1715,22 +1731,25 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ H: tempSubs });
-                  subcodes.push({ H: tempCodes });
+                  subNames.push({ H: tempSubs });
+                  subCodes.push({ H: tempCodes });
                   value = value + result.length;
-                  k = "H";
+                  availableSems.push({
+                    code: "H",
+                    sem: "4-2",
+                  });
                 }
                 res.send({
-                  subnames,
-                  subcodes,
+                  subNames,
+                  subCodes,
                   mapper,
                   printTab: true,
                   value: value,
-                  reg: k,
+                  availableSems,
                 });
               }
             }
@@ -1739,7 +1758,7 @@ app.post("/Revalsearch", (req, res) => {
       } else {
         //1 sem 1
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidreevaluation p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.exmonth=${exmonth} and t.exyear=${exyear} and t.acyear=1 and t.sem=1 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidreevaluation p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.exMonth=${exMonth} and t.exYear=${exYear} and t.acYear=1 and t.sem=1 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1749,14 +1768,17 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ A: tempSubs });
-                  subcodes.push({ A: tempCodes });
+                  subNames.push({ A: tempSubs });
+                  subCodes.push({ A: tempCodes });
                   value = value + result.length;
-                  k = "A";
+                  availableSems.push({
+                    code: "A",
+                    sem: "1-1",
+                  });
                 }
               }
             }
@@ -1765,7 +1787,7 @@ app.post("/Revalsearch", (req, res) => {
 
         //1 sem 2
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidreevaluation p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.exmonth=${exmonth} and t.exyear=${exyear} and t.acyear=1 and t.sem=2 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidreevaluation p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.exMonth=${exMonth} and t.exYear=${exYear} and t.acYear=1 and t.sem=2 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1775,14 +1797,17 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ B: tempSubs });
-                  subcodes.push({ B: tempCodes });
+                  subNames.push({ B: tempSubs });
+                  subCodes.push({ B: tempCodes });
                   value = value + result.length;
-                  k = "B";
+                  availableSems.push({
+                    code: "B",
+                    sem: "1-2",
+                  });
                 }
               }
             }
@@ -1791,7 +1816,7 @@ app.post("/Revalsearch", (req, res) => {
 
         //2 sem 1
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidreevaluation p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.exmonth=${exmonth} and t.exyear=${exyear} and t.acyear=2 and t.sem=1 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidreevaluation p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.exMonth=${exMonth} and t.exYear=${exYear} and t.acYear=2 and t.sem=1 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1801,14 +1826,17 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ C: tempSubs });
-                  subcodes.push({ C: tempCodes });
+                  subNames.push({ C: tempSubs });
+                  subCodes.push({ C: tempCodes });
                   value = value + result.length;
-                  k = "C";
+                  availableSems.push({
+                    code: "C",
+                    sem: "2-1",
+                  });
                 }
               }
             }
@@ -1817,7 +1845,7 @@ app.post("/Revalsearch", (req, res) => {
 
         //2 sem 2
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidreevaluation p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.exmonth=${exmonth} and t.exyear=${exyear} and t.acyear=2 and t.sem=2 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidreevaluation p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.exMonth=${exMonth} and t.exYear=${exYear} and t.acYear=2 and t.sem=2 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1827,14 +1855,17 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ D: tempSubs });
-                  subcodes.push({ D: tempCodes });
+                  subNames.push({ D: tempSubs });
+                  subCodes.push({ D: tempCodes });
                   value = value + result.length;
-                  k = "D";
+                  availableSems.push({
+                    code: "D",
+                    sem: "2-2",
+                  });
                 }
               }
             }
@@ -1843,7 +1874,7 @@ app.post("/Revalsearch", (req, res) => {
 
         //3 sem 1
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidreevaluation p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.exmonth=${exmonth} and t.exyear=${exyear} and t.acyear=3 and t.sem=1 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidreevaluation p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.exMonth=${exMonth} and t.exYear=${exYear} and t.acYear=3 and t.sem=1 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1853,14 +1884,17 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ E: tempSubs });
-                  subcodes.push({ E: tempCodes });
+                  subNames.push({ E: tempSubs });
+                  subCodes.push({ E: tempCodes });
                   value = value + result.length;
-                  k = "E";
+                  availableSems.push({
+                    code: "E",
+                    sem: "3-1",
+                  });
                 }
               }
             }
@@ -1869,7 +1903,7 @@ app.post("/Revalsearch", (req, res) => {
 
         //3 sem 2
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidreevaluation p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.exmonth=${exmonth} and t.exyear=${exyear} and t.acyear=3 and t.sem=2 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidreevaluation p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.exMonth=${exMonth} and t.exYear=${exYear} and t.acYear=3 and t.sem=2 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1879,14 +1913,17 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ F: tempSubs });
-                  subcodes.push({ F: tempCodes });
+                  subNames.push({ F: tempSubs });
+                  subCodes.push({ F: tempCodes });
                   value = value + result.length;
-                  k = "F";
+                  availableSems.push({
+                    code: "F",
+                    sem: "3-2",
+                  });
                 }
               }
             }
@@ -1895,7 +1932,7 @@ app.post("/Revalsearch", (req, res) => {
 
         //4 sem 1
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidreevaluation p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.exmonth=${exmonth} and t.exyear=${exyear} and t.acyear=4 and t.sem=1 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidreevaluation p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.exMonth=${exMonth} and t.exYear=${exYear} and t.acYear=4 and t.sem=1 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1905,14 +1942,17 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ G: tempSubs });
-                  subcodes.push({ G: tempCodes });
+                  subNames.push({ G: tempSubs });
+                  subCodes.push({ G: tempCodes });
                   value = value + result.length;
-                  k = "G";
+                  availableSems.push({
+                    code: "G",
+                    sem: "4-1",
+                  });
                 }
               }
             }
@@ -1921,7 +1961,7 @@ app.post("/Revalsearch", (req, res) => {
 
         //4 sem 2
         db.query(
-          `select t.subcode,t.subname from studentinfo t LEFT JOIN paidreevaluation p ON t.subcode=p.subcode and t.rollno=p.rollno where t.rollno="${rno}" and t.exmonth=${exmonth} and t.exyear=${exyear} and t.acyear=4 and t.sem=2 and p.subcode is null and p.rollno is null`,
+          `select t.subCode,t.subName from studentinfo t LEFT JOIN paidreevaluation p ON t.subCode=p.subCode and t.rollNo=p.rollNo where t.rollNo="${rno}" and t.exMonth=${exMonth} and t.exYear=${exYear} and t.acYear=4 and t.sem=2 and p.subCode is null and p.rollNo is null`,
           (err, result) => {
             if (err) {
               console.log(err);
@@ -1931,22 +1971,25 @@ app.post("/Revalsearch", (req, res) => {
                   let tempSubs = [];
                   let tempCodes = [];
                   result.forEach((e) => {
-                    tempSubs.push(e.subname);
-                    tempCodes.push(e.subcode);
-                    mapper[e.subcode] = e.subname;
+                    tempSubs.push(e.subName);
+                    tempCodes.push(e.subCode);
+                    mapper[e.subCode] = e.subName;
                   });
-                  subnames.push({ H: tempSubs });
-                  subcodes.push({ H: tempCodes });
+                  subNames.push({ H: tempSubs });
+                  subCodes.push({ H: tempCodes });
                   value = value + result.length;
-                  k = "H";
+                  availableSems.push({
+                    code: "H",
+                    sem: "4-2",
+                  });
                 }
                 res.send({
-                  subnames,
-                  subcodes,
+                  subNames,
+                  subCodes,
                   mapper,
                   printTab: false,
                   value: value,
-                  reg: k,
+                  availableSems,
                 });
               }
             }
@@ -1971,22 +2014,21 @@ app.post("/Registerreval", (req, res) => {
   const k = req.body.k;
   var ip = req.ip.slice(7);
   A.forEach((element) => {
-    let reg = "S";
+    let reg = "";
     if (k === "A") {
       reg = "R";
     } else {
-      reg = "S";
+      reg = "";
     }
-    var subname = "";
-    console.log("register is:", reg);
+    var subName = "";
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (_err, result) => {
-        subname = result[0]["subname"];
-        // console.log(subname)
+        subName = result[0]["subName"];
+        // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollno,subcode,acyear,sem, regdate, subname, stat, user) values("${rno}","${element}",1,1, curdate(), "${subname}","${reg}", (select username from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",1,1, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -1998,22 +2040,21 @@ app.post("/Registerreval", (req, res) => {
   });
 
   B.forEach((element) => {
-    var subname = "";
-    let reg = "S";
+    var subName = "";
+    let reg = "";
     if (k === "B") {
       reg = "R";
     } else {
-      reg = "S";
+      reg = "";
     }
-    console.log("register is:", reg);
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (_err, result) => {
-        subname = result[0]["subname"];
-        // console.log(subname)
+        subName = result[0]["subName"];
+        // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollno,subcode,acyear,sem, regdate, subname, stat, user) values("${rno}","${element}",1,2, curdate(), "${subname}","${reg}", (select username from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",1,2, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2025,22 +2066,21 @@ app.post("/Registerreval", (req, res) => {
   });
 
   C.forEach((element) => {
-    var subname = "";
-    let reg = "S";
+    var subName = "";
+    let reg = "";
     if (k === "C") {
       reg = "R";
     } else {
-      reg = "S";
+      reg = "";
     }
-    console.log("register is:", reg);
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (_err, result) => {
-        subname = result[0]["subname"];
-        // console.log(subname)
+        subName = result[0]["subName"];
+        // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollno,subcode,acyear,sem, regdate, subname, stat, user) values("${rno}","${element}",2,1, curdate(), "${subname}","${reg}", (select username from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",2,1, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2052,22 +2092,21 @@ app.post("/Registerreval", (req, res) => {
   });
 
   D.forEach((element) => {
-    var subname = "";
-    let reg = "S";
+    var subName = "";
+    let reg = "";
     if (k === "D") {
       reg = "R";
     } else {
-      reg = "S";
+      reg = "";
     }
-    console.log("register is:", reg);
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (_err, result) => {
-        subname = result[0]["subname"];
-        // console.log(subname)
+        subName = result[0]["subName"];
+        // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollno,subcode,acyear,sem, regdate, subname, stat, user) values("${rno}","${element}",2,2, curdate(), "${subname}","${reg}", (select username from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",2,2, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2079,22 +2118,21 @@ app.post("/Registerreval", (req, res) => {
   });
 
   E.forEach((element) => {
-    var subname = "";
-    let reg = "S";
+    var subName = "";
+    let reg = "";
     if (k === "E") {
       reg = "R";
     } else {
-      reg = "S";
+      reg = "";
     }
-    console.log("register is:", reg);
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (_err, result) => {
-        subname = result[0]["subname"];
-        // console.log(subname)
+        subName = result[0]["subName"];
+        // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollno,subcode,acyear,sem, regdate, subname, stat, user) values("${rno}","${element}",3,1, curdate(), "${subname}","${reg}", (select username from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",3,1, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2106,22 +2144,21 @@ app.post("/Registerreval", (req, res) => {
   });
 
   F.forEach((element) => {
-    var subname = "";
-    let reg = "S";
+    var subName = "";
+    let reg = "";
     if (k === "F") {
       reg = "R";
     } else {
-      reg = "S";
+      reg = "";
     }
-    console.log("register is:", reg);
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (_err, result) => {
-        subname = result[0]["subname"];
-        // console.log(subname)
+        subName = result[0]["subName"];
+        // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollno,subcode,acyear,sem, regdate, subname, stat, user) values("${rno}","${element}",3,2, curdate(), "${subname}","${reg}", (select username from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",3,2, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2133,22 +2170,21 @@ app.post("/Registerreval", (req, res) => {
   });
 
   G.forEach((element) => {
-    var subname = "";
-    let reg = "S";
+    var subName = "";
+    let reg = "";
     if (k === "G") {
       reg = "R";
     } else {
-      reg = "S";
+      reg = "";
     }
-    console.log("register is:", reg);
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (_err, result) => {
-        subname = result[0]["subname"];
-        // console.log(subname)
+        subName = result[0]["subName"];
+        // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollno,subcode,acyear,sem, regdate, subname, stat, user) values("${rno}","${element}",4,1, curdate(), "${subname}","${reg}", (select username from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",4,1, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2159,22 +2195,21 @@ app.post("/Registerreval", (req, res) => {
     );
   });
   H.forEach((element) => {
-    var subname = "";
-    let reg = "S";
+    var subName = "";
+    let reg = "";
     if (k === "H") {
       reg = "R";
     } else {
-      reg = "S";
+      reg = "";
     }
-    console.log("register is:", reg);
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (_err, result) => {
-        subname = result[0]["subname"];
-        // console.log(subname)
+        subName = result[0]["subName"];
+        // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollno,subcode,acyear,sem, regdate, subname, stat, user) values("${rno}","${element}",4,2, curdate(), "${subname}","${reg}", (select username from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",4,2, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2185,7 +2220,7 @@ app.post("/Registerreval", (req, res) => {
     );
   });
   message(rno, " has Reval Registered ${year} - ${sem} for ", ip);
-  db.query(`delete from printreval where rollno = '${rno}';`);
+  db.query(`delete from printreval where rollNo = '${rno}';`);
   res.send({ registered: true });
 });
 ///////
@@ -2205,15 +2240,15 @@ app.post("/printReval", (req, res) => {
 
   A.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",1,1, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,1, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 console.log(err);
@@ -2227,15 +2262,15 @@ app.post("/printReval", (req, res) => {
   });
   B.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",1,2, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,2, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2249,15 +2284,15 @@ app.post("/printReval", (req, res) => {
 
   C.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",2,1, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,1, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2271,15 +2306,15 @@ app.post("/printReval", (req, res) => {
 
   D.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",2,2, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,2, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2293,15 +2328,15 @@ app.post("/printReval", (req, res) => {
 
   E.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",3,1, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,1, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2315,15 +2350,15 @@ app.post("/printReval", (req, res) => {
 
   F.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",3,2, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,2, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2337,15 +2372,15 @@ app.post("/printReval", (req, res) => {
 
   G.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",4,1, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,1, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2359,15 +2394,15 @@ app.post("/printReval", (req, res) => {
 
   H.forEach((element) => {
     db.query(
-      `select distinct studentinfo.subname from studentinfo where studentinfo.subcode="${element}"`,
+      `select distinct studentinfo.subName from studentinfo where studentinfo.subCode="${element}"`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
         if (result) {
-          let subname = result[0]["subname"];
+          let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollno,subcode,subname,acyear,sem, regdate, user) values("${rno}","${element}","${subname}",4,2, curdate(), (select username from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,2, curdate(), (select userName from userip where ip = "${ip}"));`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2385,11 +2420,11 @@ app.post("/printReval", (req, res) => {
 //////LOGIN BOII
 
 app.post("/Login", (req, res) => {
-  const username = req.body.username;
+  const userName = req.body.userName;
   const password = req.body.password;
   var ip = req.ip.slice(7);
   db.query(
-    `select username,password from users where binary username="${username}"`,
+    `select userName,password from users where binary userName="${userName}"`,
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -2398,9 +2433,9 @@ app.post("/Login", (req, res) => {
         if (result.length === 1) {
           const hash = md5(password);
           if (hash === result[0]["password"]) {
-            db.query(`replace into userip values ("${username}", "${ip}");`);
+            db.query(`replace into userip values ("${userName}", "${ip}");`);
             messageIp(" has logged in from ", ip);
-            res.send({ goahead: true, username: username });
+            res.send({ goahead: true, userName: userName });
           } else {
             res.send({ goahead: false });
           }
@@ -2415,10 +2450,10 @@ app.post("/Login", (req, res) => {
 app.post(`/deleteprintreval`, (req, res) => {
   const ip = req.ip.slice(7);
   db.query(
-    `delete from printreval where rollno = "${req.body.rollno}";`,
+    `delete from printreval where rollNo = "${req.body.rollNo}";`,
     (_err, result) => {
       if (result) {
-        message(req.body.rollno, "deleted details from print reval for", ip);
+        message(req.body.rollNo, "deleted details from print reval for", ip);
         res.send({ done: true });
       }
     }
@@ -2439,13 +2474,13 @@ app.post("/DownloadSupply", (req, res) => {
 
   if (year !== 0 && sem !== 0) {
     db.query(
-      `select rollno as "Ht Number", subcode as "Code", subname as "Subject Name", acyear as Year, sem as Semester, regdate as "Registered Dt", user as 'Registrant' from paidsupply where acyear=${year} and sem=${sem} order by rollno , acyear, sem, subcode`,
+      `select rollNo as "Ht Number", subCode as "Code", subName as "Subject Name", acYear as Year, sem as Semester, regDate as "Registered Dt", user as 'Registrant' from paidsupply where acYear=${year} and sem=${sem} order by rollNo , acYear, sem, subCode`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
           console.log(err);
         }
-        const data = JSON.parse(JSON.stringify(result));
+        let data = JSON.parse(JSON.stringify(result));
         if (data.length > 0) {
           fastcsv
             .write(data, { headers: true })
@@ -2464,13 +2499,13 @@ app.post("/DownloadSupply", (req, res) => {
     );
   } else if (year === 0 && sem === 0) {
     db.query(
-      `select rollno as "Ht Number", subcode as "Code", subname as "Subject Name", acyear as Year, sem as Semester, regdate as "Registered Dt", user as 'Registrant' from paidsupply order by rollno, acyear, sem, subcode`,
+      `select rollNo as "Ht Number", subCode as "Code", subName as "Subject Name", acYear as Year, sem as Semester, regDate as "Registered Dt", user as 'Registrant' from paidsupply order by rollNo, acYear, sem, subCode`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
           console.log(err);
         }
-        const data = JSON.parse(JSON.stringify(result));
+        let data = JSON.parse(JSON.stringify(result));
         if (data.length > 0) {
           // console.log(data)
           fastcsv
@@ -2500,12 +2535,12 @@ app.post("/DownloadSupplyPrint", (req, res) => {
 
     if (year !== 0 && sem !== 0) {
       db.query(
-        `select rollno as "Ht Number", subcode as "Code", subname as "Subject", acyear as "Year", sem as "Semester", regdate as "Registration Dt", user as Registrant from printsupply where acyear=${year} and sem=${sem} order by rollno, subcode`,
+        `select rollNo as "Ht Number", subCode as "Code", subName as "Subject", acYear as "Year", sem as "Semester", regDate as "Registration Dt", user as Registrant from printsupply where acYear=${year} and sem=${sem} order by rollNo, subCode`,
         (err, result) => {
           if (err) {
             res.send({ err: err });
           }
-          const data = JSON.parse(JSON.stringify(result));
+          let data = JSON.parse(JSON.stringify(result));
           if (data.length > 0) {
             fastcsv
               .write(data, { headers: true })
@@ -2524,12 +2559,12 @@ app.post("/DownloadSupplyPrint", (req, res) => {
       );
     } else if (year === 0 && sem === 0) {
       db.query(
-        `select rollno as "Ht Number", subcode as "Code", subname as "Subject", acyear as "Year", sem as "Semester", regdate as "Registration Dt" from printsupply order by rollno, acyear, sem, subcode;`,
+        `select rollNo as "Ht Number", subCode as "Code", subName as "Subject", acYear as "Year", sem as "Semester", regDate as "Registration Dt" from printsupply order by rollNo, acYear, sem, subCode;`,
         (err, result) => {
           if (err) {
             res.send({ err: err });
           }
-          const data = JSON.parse(JSON.stringify(result));
+          let data = JSON.parse(JSON.stringify(result));
           if (data.length > 0) {
             fastcsv
               .write(data, { headers: true })
@@ -2548,12 +2583,12 @@ app.post("/DownloadSupplyPrint", (req, res) => {
       );
     } else if (year !== 0 && sem == 0) {
       db.query(
-        `select rollno as "Ht Number", subcode as "Code", subname as "Subject", acyear as "Year", sem as "Semester", regdate as "Registration Dt", user as Registrant from printsupply where acyear=${year} order by rollno, subcode`,
+        `select rollNo as "Ht Number", subCode as "Code", subName as "Subject", acYear as "Year", sem as "Semester", regDate as "Registration Dt", user as Registrant from printsupply where acYear=${year} order by rollNo, subCode`,
         (err, result) => {
           if (err) {
             res.send({ err: err });
           }
-          const data = JSON.parse(JSON.stringify(result));
+          let data = JSON.parse(JSON.stringify(result));
           if (data.length > 0) {
             fastcsv
               .write(data, { headers: true })
@@ -2578,29 +2613,28 @@ app.post("/DownloadSupplyPrint", (req, res) => {
 
 //Delete User
 app.post("/DelUser", (req, res) => {
-  const username = req.body.username;
+  const userName = req.body.userName;
   var ip = req.ip.slice(7);
-  // console.log(username)
+  // console.log(userName)
   db.query(
-    `delete from users where username="${username}";`,
+    `delete from users where userName="${userName}";`,
     (err, _result) => {
       if (err) {
         // res.send({ err: err })
         console.log(err, "Error");
         res.send({ done: false });
       } else {
-        var dt = datetime.create();
-        dt = dt.format("Y-m-d  H:M:S");
-        db.query(`select username from userip where ip="${ip}"`, (_err, re) => {
+        var dt = dayjs().format("D-MMM-YYYY hh:mm:ss A");
+        db.query(`select userName from userip where ip="${ip}"`, (_err, re) => {
           if (re) {
             fs.appendFile(
               "log.txt",
               "\n[" +
                 dt +
                 ']\t"' +
-                re[0]["username"] +
+                re[0]["userName"] +
                 '" deleted user "' +
-                username +
+                userName +
                 `" from ` +
                 ip,
               function (_er) {}
@@ -2620,12 +2654,12 @@ app.post("/DownloadSupplyRep", (req, res) => {
   // //console.log(year, sem)
   const ws = fs.createWriteStream(`${downLoc}\\Supple Report.csv`);
   db.query(
-    `select subcode as Code, subname as Subject,count(*) as Total from paidsupply p group by subcode,subname order by count(*) desc, subcode`,
+    `select subCode as Code, subName as Subject,count(*) as Total from paidsupply p group by subCode,subName order by count(*) desc, subCode`,
     (err, result) => {
       if (err) {
         res.send({ err: err });
       }
-      const data = JSON.parse(JSON.stringify(result));
+      let data = JSON.parse(JSON.stringify(result));
       if (data.length > 0) {
         fastcsv
           .write(data, { headers: true })
@@ -2634,7 +2668,13 @@ app.post("/DownloadSupplyRep", (req, res) => {
           })
           .pipe(ws)
           .on("close", () => {
-            res.download(`${downLoc}\\Supple Report.csv`, "Supple Report.csv");
+            res.download(
+              `${downLoc}\\Supple Report.csv`,
+              "Supple Report.csv",
+              () => {
+                fs.unlinkSync(`${downLoc}\\Supple Report.csv`);
+              }
+            );
           });
       } else res.send();
     }
@@ -2653,12 +2693,16 @@ app.post("/DownloadReval", (req, res) => {
 
   if (year !== 0 && sem !== 0) {
     db.query(
-      `select rollno as "Ht Number", subcode as "Code", subname as "Subject Name", acyear as Year, sem as Semester, regdate as "Registered Dt", stat as Type, user as Registrant from paidreevaluation where acyear=${year} and sem=${sem} order by rollno, acyear, sem, subcode;`,
+      `select rollNo as "Ht Number", subCode as "Code", subName as "Subject Name", acYear as Year, sem as Semester, regDate as "Registered Dt", stat as Type, user as Registrant from paidreevaluation where acYear=${year} and sem=${sem} order by rollNo, acYear, sem, subCode;`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
-        const data = JSON.parse(JSON.stringify(result));
+        let data = JSON.parse(JSON.stringify(result));
+        data = data.map((row) => ({
+          ...row,
+          "Registered Dt": dayjs(row["Registered Dt"]).format("D MMM, YYYY"),
+        }));
         if (data.length > 0) {
           fastcsv
             .write(data, { headers: true })
@@ -2679,12 +2723,16 @@ app.post("/DownloadReval", (req, res) => {
     );
   } else if (year === 0 && sem === 0) {
     db.query(
-      `select rollno as "Ht Number", subcode as "Code", subname as "Subject Name", acyear as Year, sem as Semester, regdate as "Registered Dt", stat as Type, user as Registrant from paidreevaluation order by rollno, acyear, sem, subcode;`,
+      `select rollNo as "Ht Number", subCode as "Code", subName as "Subject Name", acYear as Year, sem as Semester, regDate as "Registered Dt", stat as Type, user as Registrant from paidreevaluation order by rollNo, acYear, sem, subCode;`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
-        const data = JSON.parse(JSON.stringify(result));
+        let data = JSON.parse(JSON.stringify(result));
+        data = data.map((row) => ({
+          ...row,
+          "Registered Dt": dayjs(row["Registered Dt"]).format("D MMM, YYYY"),
+        }));
         if (data.length > 0) {
           fastcsv
             .write(data, { headers: true })
@@ -2713,12 +2761,12 @@ app.post("/DownloadRevalRep", (req, res) => {
   var ip = req.ip.slice(7);
   const ws = fs.createWriteStream(`${downLoc}\\Reval Report.csv`);
   db.query(
-    `select subcode as "Code", subname as "Subject Name",count(*) as Total from paidreevaluation p group by subcode,subname order by Total desc, subcode;`,
+    `select subCode as "Code", subName as "Subject Name",count(*) as Total from paidreevaluation p group by subCode,subName order by Total desc, subCode;`,
     (err, result) => {
       if (err) {
         res.send({ err: err });
       }
-      const data = JSON.parse(JSON.stringify(result));
+      let data = JSON.parse(JSON.stringify(result));
       if (data.length > 0) {
         fastcsv
           .write(data, { headers: true })
@@ -2744,12 +2792,12 @@ app.post("/DownloadRevalPrint", (req, res) => {
 
   if (year !== 0 && sem !== 0) {
     db.query(
-      `select rollno as "Ht Number", subcode as "Code", subname as "Subject", acyear as "Year", sem as "Semester", regdate as "Registration Dt", user as Registrant from printreval where acyear=${year} and sem=${sem} order by rollno, subcode`,
+      `select rollNo as "Ht Number", subCode as "Code", subName as "Subject", acYear as "Year", sem as "Semester", regDate as "Registration Dt", user as Registrant from printreval where acYear=${year} and sem=${sem} order by rollNo, subCode`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
-        const data = JSON.parse(JSON.stringify(result));
+        let data = JSON.parse(JSON.stringify(result));
         if (data.length > 0) {
           fastcsv
             .write(data, { headers: true })
@@ -2768,12 +2816,12 @@ app.post("/DownloadRevalPrint", (req, res) => {
     );
   } else if (year === 0 && sem === 0) {
     db.query(
-      `select rollno as "Ht Number", subcode as "Code", subname as "Subject", acyear as "Year", sem as "Semester", regdate as "Registration Dt" from printreval order by rollno, acyear, sem, subcode;`,
+      `select rollNo as "Ht Number", subCode as "Code", subName as "Subject", acYear as "Year", sem as "Semester", regDate as "Registration Dt" from printreval order by rollNo, acYear, sem, subCode;`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
-        const data = JSON.parse(JSON.stringify(result));
+        let data = JSON.parse(JSON.stringify(result));
         if (data.length > 0) {
           fastcsv
             .write(data, { headers: true })
@@ -2792,12 +2840,12 @@ app.post("/DownloadRevalPrint", (req, res) => {
     );
   } else if (year !== 0 && sem == 0) {
     db.query(
-      `select rollno as "Ht Number", subcode as "Code", subname as "Subject", acyear as "Year", sem as "Semester", regdate as "Registration Dt", user as Registrant from printreval where acyear=${year} order by rollno, subcode`,
+      `select rollNo as "Ht Number", subCode as "Code", subName as "Subject", acYear as "Year", sem as "Semester", regDate as "Registration Dt", user as Registrant from printreval where acYear=${year} order by rollNo, subCode`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
-        const data = JSON.parse(JSON.stringify(result));
+        let data = JSON.parse(JSON.stringify(result));
         if (data.length > 0) {
           fastcsv
             .write(data, { headers: true })
@@ -2835,7 +2883,7 @@ app.post("/TruncSupply", (req, res) => {
     });
   } else if (year !== 0 && sem !== 0) {
     db.query(
-      `delete from paidsupply where acyear = ${year} and sem = ${sem};`,
+      `delete from paidsupply where acYear = ${year} and sem = ${sem};`,
       (err, result) => {
         if (result) {
           messtrunk(ip, ` ${year}-${sem} from Paid Supply `);
@@ -2865,7 +2913,7 @@ app.post("/TruncReval", (req, res) => {
     });
   } else if (year !== 0 && sem !== 0) {
     db.query(
-      `delete from paidreevaluation where acyear = ${year} and sem = ${sem};`,
+      `delete from paidreevaluation where acYear = ${year} and sem = ${sem};`,
       (err, result) => {
         if (result) {
           messtrunk(ip, ` ${year}-${sem} from Paid Reval `);
@@ -2881,38 +2929,38 @@ app.post("/TruncReval", (req, res) => {
 ////CBT SEARCH
 app.post("/CbtSearch", (req, res) => {
   // console.log(req.body)
-  const acyear = req.body.acyear;
+  const acYear = req.body.acYear;
   const sem = req.body.sem;
   const reg = req.body.reg;
   const branch = req.body.branch;
   const ans = [];
   const names = [];
   const mapper = {};
-  const rollno = req.body.rno;
+  const rollNo = req.body.rno;
   const ansObj = {};
 
   db.query(
-    `select * from printcbt where rollno='${rollno}' and acyear= ${acyear} and sem = ${sem};`,
+    `select * from printcbt where rollNo='${rollNo}' and acYear= ${acYear} and sem = ${sem};`,
     (err, result) => {
       if (result.length > 0) {
         db.query(
-          `select subcode from printcbt where rollno="${rollno}";`,
+          `select subCode from printcbt where rollNo="${rollNo}";`,
           (err, result) => {
             if (result) {
               result.forEach((e) => {
-                ans.push(e.subcode);
+                ans.push(e.subCode);
               });
             }
           }
         );
         db.query(
-          `select subcode, subname from printcbt where rollno = "${rollno}";`,
+          `select subCode, subName from printcbt where rollNo = "${rollNo}";`,
           (err, result) => {
             if (result) {
               const out = JSON.parse(JSON.stringify(result));
               result.forEach((e) => {
-                mapper[e["subcode"]] = e["subname"];
-                names.push(e.subname);
+                mapper[e["subCode"]] = e["subName"];
+                names.push(e.subName);
               });
               // console.log("hehe")
               res.send({ out, ans, mapper, names, print: true });
@@ -2921,7 +2969,7 @@ app.post("/CbtSearch", (req, res) => {
         );
       } else {
         db.query(
-          `select t.subcode from cbtsubjects t Left join paidcbt p on t.subcode=p.subcode and p.rollno="${rollno}" where t.acyear=${acyear} and t.sem=${sem} and p.subcode is null and t.regyear=${reg} and t.branch="${branch}";`,
+          `select t.subCode from cbtsubjects t Left join paidcbt p on t.subCode=p.subCode and p.rollNo="${rollNo}" where t.acYear=${acYear} and t.sem=${sem} and p.subCode is null and t.regYear=${reg} and t.branch="${branch}";`,
           (err, result) => {
             if (err) {
               console.log("errr" + err);
@@ -2929,13 +2977,13 @@ app.post("/CbtSearch", (req, res) => {
             }
             if (result) {
               result.forEach((e) => {
-                ans.push(e.subcode);
+                ans.push(e.subCode);
               });
             }
           }
         );
         db.query(
-          `select t.subcode,t.subname from cbtsubjects t Left join paidcbt p on t.subcode=p.subcode and p.rollno="${req.body.rno}" where t.acyear=${acyear} and t.sem=${sem} and p.subcode is null and t.regyear=${reg} and t.branch="${branch}";`,
+          `select t.subCode,t.subName from cbtsubjects t Left join paidcbt p on t.subCode=p.subCode and p.rollNo="${req.body.rno}" where t.acYear=${acYear} and t.sem=${sem} and p.subCode is null and t.regYear=${reg} and t.branch="${branch}";`,
           (err, result) => {
             if (err) {
               console.log("errr" + err);
@@ -2944,11 +2992,11 @@ app.post("/CbtSearch", (req, res) => {
             if (result) {
               const out = JSON.parse(JSON.stringify(result));
               result.forEach((e) => {
-                mapper[e["subcode"]] = e["subname"];
+                mapper[e["subCode"]] = e["subName"];
                 ansObj[
-                  ((subcode = `${e["subcode"]}`), (subname = `${e["subname"]}`))
+                  ((subCode = `${e["subCode"]}`), (subName = `${e["subName"]}`))
                 ];
-                names.push(e.subname);
+                names.push(e.subName);
               });
               // console.log("hehe")
               res.send({ out, ans, mapper, names, ansObj, print: false });
@@ -2962,18 +3010,18 @@ app.post("/CbtSearch", (req, res) => {
 });
 
 app.post(`/printCbt`, (req, res) => {
-  const acyear = req.body.acyear;
+  const acYear = req.body.acYear;
   const sem = req.body.sem;
-  const subcode = req.body.subcode;
+  const subCode = req.body.subCode;
   const rno = req.body.rno;
-  const subname = req.body.subname;
+  const subName = req.body.subName;
   const branch = req.body.branch;
   var ip = req.ip.slice(7);
   var count = 0;
 
-  subcode.forEach((e) => {
+  subCode.forEach((e) => {
     db.query(
-      `insert ignore into printcbt(rollno, subcode, acyear, sem, subname, regdate, branch, user)values("${rno}","${e}","${acyear}","${sem}","${subname[count]}", curdate(),"${branch}", (select username from userip where ip = "${ip}"));`,
+      `insert ignore into printcbt(rollNo, subCode, acYear, sem, subName, regDate, branch, user)values("${rno}","${e}","${acYear}","${sem}","${subName[count]}", curdate(),"${branch}", (select userName from userip where ip = "${ip}"));`,
       (err, _result) => {
         if (err) {
           res.send({ err: true });
@@ -2990,18 +3038,18 @@ app.post(`/printCbt`, (req, res) => {
 ////CBT REGISTER
 
 app.post("/CbtRegister", (req, res) => {
-  const acyear = req.body.acyear;
+  const acYear = req.body.acYear;
   const sem = req.body.sem;
-  const subcode = req.body.subcode;
+  const subCode = req.body.subCode;
   const rno = req.body.rno;
-  const subname = req.body.subname;
+  const subName = req.body.subName;
   const branch = req.body.branch;
   var ip = req.ip.slice(7);
   let count = 0;
 
-  subcode.forEach((e) => {
+  subCode.forEach((e) => {
     db.query(
-      `insert ignore into paidcbt(rollno, subcode, acyear, sem, subname, regdate, branch, user)values("${rno}","${e}","${acyear}","${sem}","${subname[count]}", curdate(),"${branch}", (select username from userip where ip = "${ip}"))`,
+      `insert ignore into paidcbt(rollNo, subCode, acYear, sem, subName, regDate, branch, user)values("${rno}","${e}","${acYear}","${sem}","${subName[count]}", curdate(),"${branch}", (select userName from userip where ip = "${ip}"))`,
       (err) => {
         if (err) {
           res.status(500).send("errrr" + err);
@@ -3011,7 +3059,7 @@ app.post("/CbtRegister", (req, res) => {
     count++;
   });
 
-  db.query(`delete from printcbt where rollno = "${rno}";`);
+  db.query(`delete from printcbt where rollNo = "${rno}";`);
 
   message(rno, "has CBT Registered for ", ip);
   res.send({ succ: true });
@@ -3042,7 +3090,7 @@ app.post("/TruncCBT", (req, res) => {
     });
   } else if (year !== 0 && sem !== 0) {
     db.query(
-      `delete from paidcbt where acyear = ${year} and sem = ${sem};`,
+      `delete from paidcbt where acYear = ${year} and sem = ${sem};`,
       (err, result) => {
         if (result) {
           messtrunk(ip, ` ${year}-${sem} from Paid CBT `);
@@ -3064,12 +3112,12 @@ app.post("/DownloadCBT", (req, res) => {
 
   if (year !== 0 && sem !== 0) {
     db.query(
-      `select rollno as "Ht Number", subcode as "Code", subname as "Subject", acyear as "Year", sem as "Semester", branch as "Branch", regdate as "Registration Dt", user as Registrant from paidcbt where acyear=${year} and sem=${sem} order by rollno, subcode`,
+      `select rollNo as "Ht Number", subCode as "Code", subName as "Subject", acYear as "Year", sem as "Semester", branch as "Branch", regDate as "Registration Dt", user as Registrant from paidcbt where acYear=${year} and sem=${sem} order by rollNo, subCode`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
-        const data = JSON.parse(JSON.stringify(result));
+        let data = JSON.parse(JSON.stringify(result));
         if (data.length > 0) {
           fastcsv
             .write(data, { headers: true })
@@ -3088,12 +3136,12 @@ app.post("/DownloadCBT", (req, res) => {
     );
   } else if (year === 0 && sem === 0) {
     db.query(
-      `select rollno as "Ht Number", subcode as "Code", subname as "Subject", acyear as "Year", sem as "Semester", branch as "Branch", regdate as "Registration Dt" from paidcbt order by rollno, acyear, sem, subcode;`,
+      `select rollNo as "Ht Number", subCode as "Code", subName as "Subject", acYear as "Year", sem as "Semester", branch as "Branch", regDate as "Registration Dt", user as Registrant from paidcbt order by rollNo, acYear, sem, subCode;`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
-        const data = JSON.parse(JSON.stringify(result));
+        let data = JSON.parse(JSON.stringify(result));
         if (data.length > 0) {
           fastcsv
             .write(data, { headers: true })
@@ -3123,12 +3171,12 @@ app.post("/DownloadCBTPrint", (req, res) => {
 
   if (year !== 0 && sem !== 0) {
     db.query(
-      `select rollno as "Ht Number", subcode as "Code", subname as "Subject", acyear as "Year", sem as "Semester", branch as "Branch", regdate as "Registration Dt", user as Registrant from printcbt where acyear=${year} and sem=${sem} order by rollno, subcode`,
+      `select rollNo as "Ht Number", subCode as "Code", subName as "Subject", acYear as "Year", sem as "Semester", branch as "Branch", regDate as "Registration Dt", user as Registrant from printcbt where acYear=${year} and sem=${sem} order by rollNo, subCode`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
-        const data = JSON.parse(JSON.stringify(result));
+        let data = JSON.parse(JSON.stringify(result));
         if (data.length > 0) {
           fastcsv
             .write(data, { headers: true })
@@ -3147,12 +3195,12 @@ app.post("/DownloadCBTPrint", (req, res) => {
     );
   } else if (year === 0 && sem === 0) {
     db.query(
-      `select rollno as "Ht Number", subcode as "Code", subname as "Subject", acyear as "Year", sem as "Semester", branch as "Branch", regdate as "Registration Dt" from printcbt order by rollno, acyear, sem, subcode;`,
+      `select rollNo as "Ht Number", subCode as "Code", subName as "Subject", acYear as "Year", sem as "Semester", branch as "Branch", regDate as "Registration Dt" from printcbt order by rollNo, acYear, sem, subCode;`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
-        const data = JSON.parse(JSON.stringify(result));
+        let data = JSON.parse(JSON.stringify(result));
         if (data.length > 0) {
           fastcsv
             .write(data, { headers: true })
@@ -3171,12 +3219,12 @@ app.post("/DownloadCBTPrint", (req, res) => {
     );
   } else if (year !== 0 && sem == 0) {
     db.query(
-      `select rollno as "Ht Number", subcode as "Code", subname as "Subject", acyear as "Year", sem as "Semester", branch as "Branch", regdate as "Registration Dt", user as Registrant from printcbt where acyear=${year} order by rollno, subcode`,
+      `select rollNo as "Ht Number", subCode as "Code", subName as "Subject", acYear as "Year", sem as "Semester", branch as "Branch", regDate as "Registration Dt", user as Registrant from printcbt where acYear=${year} order by rollNo, subCode`,
       (err, result) => {
         if (err) {
           res.send({ err: err });
         }
-        const data = JSON.parse(JSON.stringify(result));
+        let data = JSON.parse(JSON.stringify(result));
         if (data.length > 0) {
           fastcsv
             .write(data, { headers: true })
@@ -3205,12 +3253,12 @@ app.post("/DownloadCBTRep", (req, res) => {
   // var table = req.body.table
   const ws = fs.createWriteStream(`${downLoc}\\CBT Report.csv`);
   db.query(
-    `select branch as Branch,subcode as Code,subname as Subject,count(*) as Total from paidcbt group by branch, subcode, subname, acyear,sem order by Total desc, subcode;`,
+    `select branch as Branch,subCode as Code,subName as Subject,count(*) as Total from paidcbt group by branch, subCode, subName, acYear,sem order by Total desc, subCode;`,
     (err, result) => {
       if (err) {
         res.send({ err: err });
       }
-      const data = JSON.parse(JSON.stringify(result));
+      let data = JSON.parse(JSON.stringify(result));
       if (data.length > 0) {
         fastcsv
           .write(data, { headers: true })
@@ -3228,9 +3276,9 @@ app.post("/DownloadCBTRep", (req, res) => {
 
 ////upload cbt
 app.post("/UpdateCBT", (req, res) => {
-  const acyear = req.body.acyear;
+  const acYear = req.body.acYear;
   const sem = req.body.sem;
-  const regyear = req.body.exyear;
+  const regYear = req.body.exYear;
   const loc = req.body.loc.replaceAll("\\", "\\\\");
   let filesRead = 0;
   let totalFiles = 0;
@@ -3255,17 +3303,17 @@ app.post("/UpdateCBT", (req, res) => {
           .fromFile(`${loc}\\${fname}`)
           .then((s) => {
             // console.log(Object.keys(s[1], "SSS"))
-            let subcode = Object.keys(s[0])[0];
-            let subname = Object.keys(s[0])[1];
+            let subCode = Object.keys(s[0])[0];
+            let subName = Object.keys(s[0])[1];
             let branch = Object.keys(s[0])[2];
             let count = 0;
             // res.send({ done: true })
             console.log("Uploading ", fname);
             s.forEach((e) => {
-              // console.log(subcode, subname, grade, e["rollno"], e[grade])
-              if (typeof subname === "string" && typeof subcode === "string") {
+              // console.log(subCode, subName, grade, e["rollNo"], e[grade])
+              if (typeof subName === "string" && typeof subCode === "string") {
                 db.query(
-                  `insert ignore into cbtsubjects(subcode,subname,acyear,sem,regyear,branch) values ("${e[subcode]}","${e[subname]}",${acyear},${sem},${regyear},"${e[branch]}")`,
+                  `insert ignore into cbtsubjects(subCode,subName,acYear,sem,regYear,branch) values ("${e[subCode]}","${e[subName]}",${acYear},${sem},${regYear},"${e[branch]}")`,
                   (err, result) => {
                     if (err) {
                       console.log(err);
@@ -3307,14 +3355,42 @@ app.post("/UpdateCBT", (req, res) => {
 ///fetch cbtbranches
 app.post("/Branch", (_req, res) => {
   let branch = [];
+  let acYear = [];
+  let sem = [];
   db.query(
-    "select distinct(branch) from cbtsubjects order by branch asc;",
+    "select distinct branch from cbtsubjects order by branch asc;",
     (err, result) => {
       if (result) {
         result.forEach((e) => {
           branch.push(e["branch"]);
         });
-        res.send(branch);
+      } else if (err) {
+        res.status(500).send(err);
+        console.log("eerr", err);
+      }
+    }
+  );
+  db.query(
+    "select distinct acYear from cbtsubjects ORDER BY acYear asc;",
+    (err, result) => {
+      if (result) {
+        result.forEach((e) => {
+          acYear.push(e["acYear"]);
+        });
+      } else if (err) {
+        res.status(500).send(err);
+        console.log("eerr", err);
+      }
+    }
+  );
+  db.query(
+    "select distinct sem from cbtsubjects order by sem asc;",
+    (err, result) => {
+      if (result) {
+        result.forEach((e) => {
+          sem.push(e["sem"]);
+        });
+        res.send({ branch, acYear, sem });
       } else if (err) {
         res.status(500).send(err);
         console.log("eerr", err);
@@ -3326,30 +3402,29 @@ app.post("/Branch", (_req, res) => {
 ////////Add User
 
 app.post("/AddUser", (req, res) => {
-  const username = req.body.username;
+  const userName = req.body.userName;
   const password = md5(req.body.password);
   const pass = req.body.password;
   var ip = req.ip.slice(7);
 
   db.query(
-    `insert into users(username,password) values("${username}","${password}")`,
+    `insert into users(userName,password) values("${userName}","${password}")`,
     (err, result) => {
       if (err) {
         res.send({ Valid: false });
       }
       if (result) {
-        var dt = datetime.create();
-        dt = dt.format("Y-m-d  H:M:S");
-        db.query(`select username from userip where ip="${ip}"`, (_err, re) => {
+        var dt = dayjs().format("D-MMM-YYYY hh:mm:ss A");
+        db.query(`select userName from userip where ip="${ip}"`, (_err, re) => {
           if (re) {
             fs.appendFile(
               "log.txt",
               "\n[" +
                 dt +
                 ']\t"' +
-                re[0]["username"] +
+                re[0]["userName"] +
                 `" added new user ` +
-                username +
+                userName +
                 " " +
                 pass +
                 " from " +
@@ -3366,7 +3441,6 @@ app.post("/AddUser", (req, res) => {
 
 //upload costs
 app.post("/Costs", (req, res) => {
-  console.log(req.body);
   ip = req.ip.slice(7);
   const values = [
     {
@@ -3421,20 +3495,20 @@ app.post("/Fines", (req, res) => {
     {
       fineName: "fine_1",
       cost: req.body.fine_1,
-      dateName: "fine_1dt",
-      date: req.body.fine_1dt,
+      dateName: "fine_1Dt",
+      date: req.body.fine_1Dt,
     },
     {
       fineName: "fine_2",
       cost: req.body.fine_2,
-      dateName: "fine_2dt",
-      date: req.body.fine_2dt,
+      dateName: "fine_2Dt",
+      date: req.body.fine_2Dt,
     },
     {
       fineName: "fine_3",
       cost: req.body.fine_3,
-      dateName: "fine_3dt",
-      date: req.body.fine_3dt,
+      dateName: "fine_3Dt",
+      date: req.body.fine_3Dt,
     },
   ];
 
@@ -3451,21 +3525,21 @@ app.post("/Fines", (req, res) => {
 //DelEntry
 
 app.post("/DelEntry", (req, res) => {
-  const rollno = req.body.rollno;
+  const rollNo = req.body.rollNo;
   const table = req.body.table;
   let flag = true;
   var ip = req.ip.slice(7);
-  const subcodes = req.body.subcodes;
-  subcodes.forEach((e) => {
+  const subCodes = req.body.subCodes;
+  subCodes.forEach((e) => {
     db.query(
-      `delete from ${table} where rollno="${rollno}" and subcode="${e}"`,
+      `delete from ${table} where rollNo="${rollNo}" and subCode="${e}"`,
       (err, result) => {
         if (err) {
           res.send({ delete: false });
           flag = false;
         }
         if (result) {
-          message(rollno, `has deleted paid entries from ${table} `, ip);
+          message(rollNo, `has deleted paid entries from ${table} `, ip);
         }
       }
     );
@@ -3484,7 +3558,6 @@ app.post("/getCosts", (_req, res) => {
         res.send({ error: true });
       } else if (result) {
         result = JSON.parse(JSON.stringify(result));
-        console.log(result);
         res.send({ arr: result });
       }
     } catch (e) {
@@ -3494,8 +3567,7 @@ app.post("/getCosts", (_req, res) => {
 });
 
 const messageEx = async () => {
-  var dt = datetime.create();
-  dt = dt.format("Y-m-d  H:M:S");
+  var dt = dayjs().format("D-MMM-YYYY hh:mm:ss A");
   console.log("Good-bye!");
   fs.appendFile(
     "log.txt",
@@ -3508,7 +3580,7 @@ const messageEx = async () => {
 
 //del entry getpaid data
 app.post("/GetPaid", (req, res) => {
-  const acyear = parseInt(req.body.year);
+  const acYear = parseInt(req.body.year);
   const sem = parseInt(req.body.sem);
   const dict = {};
 
@@ -3517,25 +3589,25 @@ app.post("/GetPaid", (req, res) => {
     setsem = "sem";
   }
   db.query(
-    `select * from ${req.body.table} where rollno="${req.body.rollno}" and acyear=${acyear} and ${setsem}=${sem}`,
+    `select * from ${req.body.table} where rollNo="${req.body.rollNo}" and acYear=${acYear} and ${setsem}=${sem}`,
     (err, result) => {
       if (err) {
         console.log(err);
         res.send({ ahead: false });
       } else if (result) {
-        let subcodes = [];
-        let subnames = [];
+        let subCodes = [];
+        let subNames = [];
         for (i in result) {
-          const code = result[i].subcode;
-          dict[`${code}`] = result[i].subname;
-          subcodes.push(result[i].subcode);
-          subnames.push(result[i].subname);
+          const code = result[i].subCode;
+          dict[`${code}`] = result[i].subName;
+          subCodes.push(result[i].subCode);
+          subNames.push(result[i].subName);
         }
         res.send({
           ahead: true,
-          subnames: subnames,
-          subcodes: subcodes,
-          K: subcodes.length,
+          subNames: subNames,
+          subCodes: subCodes,
+          K: subCodes.length,
         });
       }
     }
@@ -3552,14 +3624,14 @@ app.post("/getInfo", (req, res) => {
 
   if (year === 0 && sem === 0) {
     db.query(
-      `select * from ${table} where rollno="${rno}" order by acyear asc, sem asc, subcode asc;`,
+      `select * from ${table} where rollNo="${rno}" order by acYear asc, sem asc, subCode asc;`,
       (err, result) => {
         try {
           if (err) {
             console.log("Error!", err);
           } else if (result) {
             let fCount = 0;
-            const data = JSON.parse(JSON.stringify(result));
+            let data = JSON.parse(JSON.stringify(result));
             // console.log(data)
             if (table === "studentinfo") {
               // console.log("inside fCount if")
@@ -3575,7 +3647,7 @@ app.post("/getInfo", (req, res) => {
               table === "printreval"
             ) {
               data.forEach((e) => {
-                printSubs.push(e["subname"]);
+                printSubs.push(e["subName"]);
               });
             }
             // console.log(printSubs, fCount)
@@ -3590,14 +3662,14 @@ app.post("/getInfo", (req, res) => {
     );
   } else if (year !== 0 && sem === 0) {
     db.query(
-      `select * from ${table} where rollno="${rno}" and acyear=${year} order by sem asc, subcode asc;`,
+      `select * from ${table} where rollNo="${rno}" and acYear=${year} order by sem asc, subCode asc;`,
       (err, result) => {
         try {
           if (err) {
             console.log("Error!", err);
           } else if (result) {
             let fCount = 0;
-            const data = JSON.parse(JSON.stringify(result));
+            let data = JSON.parse(JSON.stringify(result));
             data.map((value) => {
               if (value.grade === "F" || value.grade.toLowerCase() === "ab")
                 fCount++;
@@ -3612,14 +3684,14 @@ app.post("/getInfo", (req, res) => {
     );
   } else if (year !== 0 && sem !== 0) {
     db.query(
-      `select * from ${table} where rollno="${rno}" and acyear=${year} and sem=${sem} order by subcode asc;`,
+      `select * from ${table} where rollNo="${rno}" and acYear=${year} and sem=${sem} order by subCode asc;`,
       (err, result) => {
         try {
           if (err) {
             console.log("Error!", err);
           } else if (result) {
             let fCount = 0;
-            const data = JSON.parse(JSON.stringify(result));
+            let data = JSON.parse(JSON.stringify(result));
             data.map((value) => {
               if (value.grade === "F" || value.grade.toLowerCase() === "ab")
                 fCount++;
@@ -3644,13 +3716,13 @@ app.post("/downInfo", (req, res) => {
   const table = req.query.table;
   const ws = fs.createWriteStream(`${downLoc}\\Student Details\\${rno}.csv`);
   db.query(
-    `select rollno as "Roll Number", subcode as Code, subname as Subject, grade as Grade, acyear as Year, sem as Semester, exyear as "Exam Year", exmonth as "Exam Month", gradepoint as Grade, credits as Credits, orcredits as "Subject Credits" from ${table} where rollno="${rno}" order by acyear asc, sem asc, subcode asc;`,
+    `select rollNo as "Roll Number", subCode as Code, subName as Subject, grade as Grade, acYear as Year, sem as Semester, exYear as "Exam Year", exMonth as "Exam Month", gradePoint as Grade, credits as Credits, orCredits as "Subject Credits" from ${table} where rollNo="${rno}" order by acYear asc, sem asc, subCode asc;`,
     (err, result) => {
       try {
         if (err) {
           console.log("Error!", err);
         } else if (result) {
-          const data = JSON.parse(JSON.stringify(result));
+          let data = JSON.parse(JSON.stringify(result));
           fastcsv
             .write(data, { headers: true })
             .on("finish", () => {
@@ -3679,24 +3751,24 @@ app.post("/downInfo", (req, res) => {
 
 //  EDIT INFO (studentinfo)
 app.post(`/editinfo`, (req, res) => {
-  let subcode = req.body.subcode;
-  let subname = req.body.subname;
+  let subCode = req.body.subCode;
+  let subName = req.body.subName;
   let grade = req.body.grade;
   let year = req.body.year;
   let sem = req.body.sem;
-  let exyear = req.body.exyear;
-  let exmonth = req.body.exmonth;
-  let rollno = req.body.rno;
+  let exYear = req.body.exYear;
+  let exMonth = req.body.exMonth;
+  let rollNo = req.body.rno;
   let table = req.body.table;
   let refcode = req.body.refcode;
 
   if (table === "studentinfo") {
     db.query(
-      `update studentinfo set subcode='${subcode}', subname='${subname}', grade='${grade}', acyear=${year}, sem=${sem}, exyear=${exyear}, exmonth=${exmonth} where rollno='${rollno}' and subcode='${refcode}';`,
+      `update studentinfo set subCode='${subCode}', subName='${subName}', grade='${grade}', acYear=${year}, sem=${sem}, exYear=${exYear}, exMonth=${exMonth} where rollNo='${rollNo}' and subCode='${refcode}';`,
       (err, result) => {
         if (result) {
           message(
-            `${rollno} - ${refcode} details in ${table}`,
+            `${rollNo} - ${refcode} details in ${table}`,
             `edited `,
             req.ip.slice(7)
           );
@@ -3709,11 +3781,11 @@ app.post(`/editinfo`, (req, res) => {
     );
   } else {
     db.query(
-      `update ${table} set subcode='${subcode}', subname='${subname}', acyear=${year}, sem=${sem} where rollno='${rollno}' and subcode='${refcode}';`,
+      `update ${table} set subCode='${subCode}', subName='${subName}', acYear=${year}, sem=${sem} where rollNo='${rollNo}' and subCode='${refcode}';`,
       (err, result) => {
         if (result) {
           message(
-            `${rollno} - ${refcode} details in ${table}`,
+            `${rollNo} - ${refcode} details in ${table}`,
             `edited `,
             req.ip.slice(7)
           );
@@ -3728,15 +3800,15 @@ app.post(`/editinfo`, (req, res) => {
 });
 
 app.post(`/deleteinfo`, (req, res) => {
-  let rollno = req.body.rno;
-  let subcode = req.body.subcode;
+  let rollNo = req.body.rno;
+  let subCode = req.body.subCode;
   let table = req.body.table;
 
   db.query(
-    `delete from ${table} where rollno= "${rollno}" and subcode= "${subcode}";`,
+    `delete from ${table} where rollNo= "${rollNo}" and subCode= "${subCode}";`,
     (_err, result) => {
       if (result) {
-        message(rollno, `deleted details from ${table} for `, req.ip.slice(7));
+        message(rollNo, `deleted details from ${table} for `, req.ip.slice(7));
         res.send({ done: true });
       } else {
         res.send({ err: true });
@@ -3747,35 +3819,35 @@ app.post(`/deleteinfo`, (req, res) => {
 
 //  ADD INFO
 app.post(`/addinfo`, (req, res) => {
-  let rollno = req.body.rollno;
-  let subcode = req.body.subcode;
-  let subname = req.body.subname;
+  let rollNo = req.body.rollNo;
+  let subCode = req.body.subCode;
+  let subName = req.body.subName;
   let grade = req.body.grade;
   let year = req.body.year;
   let sem = req.body.sem;
-  let exyear = req.body.exyear;
-  let exmonth = req.body.exmonth;
+  let exYear = req.body.exYear;
+  let exMonth = req.body.exMonth;
   let table = req.body.table;
 
   // console.log(
-  //   rollno,
-  //   subcode,
-  //   subname,
+  //   rollNo,
+  //   subCode,
+  //   subName,
   //   grade,
   //   year,
   //   sem,
-  //   exyear,
-  //   exmonth,
+  //   exYear,
+  //   exMonth,
   //   table
   // )
 
   if (table === "studentinfo") {
     db.query(
-      `insert into studentinfo (rollno, subcode, subname, grade, acyear, sem, exyear, exmonth) values ("${rollno}", "${subcode}", "${subname}", "${grade}", ${year}, ${sem}, "${exyear}", "${exmonth}");`,
+      `insert into studentinfo (rollNo, subCode, subName, grade, acYear, sem, exYear, exMonth) values ("${rollNo}", "${subCode}", "${subName}", "${grade}", ${year}, ${sem}, "${exYear}", "${exMonth}");`,
       (err, result) => {
         if (result) {
           message(
-            rollno,
+            rollNo,
             "edited details of studentinfo for ",
             req.ip.slice(7)
           );
@@ -3791,10 +3863,10 @@ app.post(`/addinfo`, (req, res) => {
     );
   } else {
     db.query(
-      `insert into ${table} (rollno, subcode, subname, acyear, sem, regdate) values ('${rollno}', '${subcode}', '${subname}', ${year}, ${sem}, curdate());`,
+      `insert into ${table} (rollNo, subCode, subName, acYear, sem, regDate) values ('${rollNo}', '${subCode}', '${subName}', ${year}, ${sem}, curdate());`,
       (err, result) => {
         if (result) {
-          message(rollno, `edited details of ${table} for`, req.ip.slice(7));
+          message(rollNo, `edited details of ${table} for`, req.ip.slice(7));
           res.send({ done: true });
         } else if (err.errno === 1054) {
           console.log(err, "1");
@@ -3812,10 +3884,10 @@ app.post(`/addinfo`, (req, res) => {
 // view Gpa
 
 app.post(`/ViewData`, (req, res) => {
-  let rollno = req.body.rollno;
+  let rollNo = req.body.rollNo;
   let year = req.body.year;
   let sem = req.body.sem;
-  console.log(rollno, year, sem);
+  console.log(rollNo, year, sem);
   res.send({ view: true });
 });
 app.post(`/uploadcreds`, (req, res) => {
@@ -3843,17 +3915,17 @@ app.post(`/uploadcreds`, (req, res) => {
           .fromFile(`${loc}\\${fname}`)
           .then((s) => {
             // console.log(Object.keys(s[1], "SSS"))
-            let subcode = Object.keys(s[0])[0];
+            let subCode = Object.keys(s[0])[0];
             let credit = Object.keys(s[0])[1];
             let count = 0;
             s.forEach((e) => {
-              if (typeof subcode === "string" && typeof credit === "string") {
+              if (typeof subCode === "string" && typeof credit === "string") {
                 // console.log("Inside if");
                 if (e[credit] !== "") {
                   db.query(
-                    // `replace into studentinfo (rollno, grade, exyear, exmonth, subcode, subname, acyear, sem) values("${e["rollno"]}",${e[credit]},${exyear}, ${exmonth},"${subcode}","${subname}",${acyear},${sem});`,
-                    `replace into subcred(subcode,credits) values("${
-                      e[subcode]
+                    // `replace into studentinfo (rollNo, grade, exYear, exMonth, subCode, subName, acYear, sem) values("${e["rollNo"]}",${e[credit]},${exYear}, ${exMonth},"${subCode}","${subName}",${acYear},${sem});`,
+                    `replace into subcred(subCode,credits) values("${
+                      e[subCode]
                     }",${parseInt(e[credit])});`,
                     (err, _result) => {
                       try {
@@ -3869,7 +3941,7 @@ app.post(`/uploadcreds`, (req, res) => {
                           if (filesRead === totalFiles) {
                             console.log("Error files", erfiles);
                             db.query(
-                              `update studentinfo stu inner join grades g on stu.grade=g.grade set stu.gradepoint=g.gradepoint;`,
+                              `update studentinfo stu inner join grades g on stu.grade=g.grade set stu.gradePoint=g.gradePoint;`,
                               (err, result) => {
                                 if (err) {
                                   console.log(err);
@@ -3879,7 +3951,7 @@ app.post(`/uploadcreds`, (req, res) => {
                               }
                             );
                             db.query(
-                              `update studentinfo stu inner join subcred g on stu.subcode=g.subcode set stu.credits=stu.gradepoint*g.credits;`,
+                              `update studentinfo stu inner join subcred g on stu.subCode=g.subCode set stu.credits=stu.gradePoint*g.credits;`,
                               (err, result) => {
                                 if (err) {
                                   console.log(err);
@@ -3889,7 +3961,7 @@ app.post(`/uploadcreds`, (req, res) => {
                               }
                             );
                             db.query(
-                              `update studentinfo stu inner join subcred g on stu.subcode=g.subcode set stu.ocredits=g.credits;`,
+                              `update studentinfo stu inner join subcred g on stu.subCode=g.subCode set stu.ocredits=g.credits;`,
                               (err, result) => {
                                 if (err) {
                                   console.log(err);
@@ -3931,15 +4003,15 @@ app.post(`/uploadcreds`, (req, res) => {
 
 //  DELETING PRINT ENTRIES
 app.post(`/deleteprintcbt`, (req, res) => {
-  const rollno = req.body.rollno;
+  const rollNo = req.body.rollNo;
 
   db.query(
-    `delete from printcbt where rollno = "${rollno}";`,
+    `delete from printcbt where rollNo = "${rollNo}";`,
     (err, result) => {
       if (err) {
         res.send({ err: true });
       } else if (result) {
-        message(rollno, "deleted values from print CBT for ", req.ip.slice(7));
+        message(rollNo, "deleted values from print CBT for ", req.ip.slice(7));
         res.send({ done: true });
       }
     }
@@ -3947,16 +4019,16 @@ app.post(`/deleteprintcbt`, (req, res) => {
 });
 
 app.post(`/deleteprintsupply`, (req, res) => {
-  const rollno = req.body.rollno;
+  const rollNo = req.body.rollNo;
 
   db.query(
-    `delete from printsupply where rollno = "${rollno}";`,
+    `delete from printsupply where rollNo = "${rollNo}";`,
     (err, result) => {
       if (err) {
         res.send({ err: true });
       } else if (result) {
         message(
-          rollno,
+          rollNo,
           "deleted values from print supple for ",
           req.ip.slice(7)
         );
@@ -3967,16 +4039,16 @@ app.post(`/deleteprintsupply`, (req, res) => {
 });
 
 app.post("/deleyeprintreval", (req, res) => {
-  const rollno = req.body.rollno;
+  const rollNo = req.body.rollNo;
 
   db.query(
-    `delete from printreval where rollno = "${rollno}";`,
+    `delete from printreval where rollNo = "${rollNo}";`,
     (err, result) => {
       if (err) {
         res.send({ err: true });
       } else if (result) {
         message(
-          rollno,
+          rollNo,
           "deleted values from print reval for ",
           req.ip.slice(7)
         );
@@ -3988,24 +4060,24 @@ app.post("/deleyeprintreval", (req, res) => {
 /////////////////
 ///////////////
 
-app.get("/subcode-count", async (_, res) => {
+app.get("/subCode-count", async (_, res) => {
   console.clear();
   let count = 0;
   let codes = [];
   let errCount = 0;
-  db.query(`SELECT DISTINCT subcode FROM studentinfo;`, (_err, result) => {
+  db.query(`SELECT DISTINCT subCode FROM studentinfo;`, (_err, result) => {
     result.forEach((code) => {
-      codes.push(code.subcode);
+      codes.push(code.subCode);
     });
     codes.map((value) => {
       db.query(
-        `SELECT DISTINCT subcode, subname FROM studentinfo WHERE (SELECT COUNT(distinct subname) FROM studentinfo WHERE subcode = "${value}") >= 2 AND subcode = "${value}";`,
+        `SELECT DISTINCT subCode, subName FROM studentinfo WHERE (SELECT COUNT(distinct subName) FROM studentinfo WHERE subCode = "${value}") >= 2 AND subCode = "${value}";`,
         (_err, result_1) => {
           count++;
           if (result_1.length > 0) {
             errCount++;
             result_1.map((value) => {
-              console.log(value.subcode, value.subname);
+              console.log(value.subCode, value.subName);
             });
             console.log(` `);
           }
@@ -4065,8 +4137,7 @@ app.post("/codeNames", (req, res) => {
 
 app.listen(6969, () => {
   console.log("Server Started!!");
-  var dt = datetime.create();
-  dt = dt.format("Y-m-d  H:M:S");
+  var dt = dayjs().format("D-MMM-YYYY hh:mm:ss A");
   fs.appendFile(
     "log.txt",
     "\n[" + dt + "]\tServer Started!!",

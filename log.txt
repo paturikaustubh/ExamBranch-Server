@@ -22,3 +22,227 @@
 [2023-10-21  14:29:13]	Server Started!!
 [2023-10-21  14:29:17]	"admin"  has logged in from 
 [2023-10-21  14:37:21]	"admin" restored detabase from 
+[2023-10-21  16:55:54]	"admin" took print for supple for 19R11A05N8 from 
+[2023-10-21  17:04:38]	"admin" has registered Supply for 19R11A05N8 from 
+[2023-10-21  17:28:05]	Server Stopped!!
+[2023-10-21  17:28:09]	Server Started!!
+[2023-10-21  17:28:46]	"admin"  has logged in from 
+[2023-10-21  17:29:12]	"admin"  has logged in from 
+[2023-10-21  17:31:07]	"admin"  has logged in from 
+[2023-10-21  17:32:13]	"admin"  has logged in from 
+[2023-10-21  17:32:36]	"admin"  has logged in from 
+[2023-10-21  17:33:13]	"admin"  has logged in from 
+[2023-10-21  17:43:57]	"admin" took print for reval for 19R11A05N8 from 
+[2023-10-21  17:44:31]	"admin"  has Reval Registered ${year} - ${sem} for 19R11A05N8 from 
+[2023-10-21  18:57:58]	"admin" took print for reval for 21R15A0225 from 
+[2023-10-21  18:58:31]	"admin"  has Reval Registered ${year} - ${sem} for 21R15A0225 from 
+[2023-10-21  18:59:38]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[2023-10-21  18:59:40]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[2023-10-21  18:59:42]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[2023-10-21  18:59:43]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[2023-10-21  18:59:45]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[2023-10-21  18:59:47]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[2023-10-21  18:59:49]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[2023-10-21  19:01:27]	"admin" took print for reval for 21R15A0225 from 
+[2023-10-21  19:31:35]	"admin"  has logged in from 
+[2023-10-21  19:40:40]	Server Stopped!!
+[2023-10-21  19:40:49]	Server Started!!
+[2023-10-21  19:43:35]	Server Stopped!!
+[2023-10-21  19:43:49]	Server Started!!
+[2023-10-21  19:49:16]	"admin" took print for reval for 19R11A05N8 from 
+[2023-10-21  19:58:05]	"admin"  has Reval Registered ${year} - ${sem} for 19R11A05N8 from 
+[2023-10-21  19:59:23]	Server Stopped!!
+[2023-10-21  20:00:26]	Server Started!!
+[2023-10-21  20:01:48]	Server Stopped!!
+[2023-10-21  20:01:51]	Server Started!!
+[2023-10-21  20:02:14]	"admin" took print for reval for 19R11A05N8 from 
+[2023-10-21  20:02:37]	"admin"  has Reval Registered ${year} - ${sem} for 19R11A05N8 from 
+[2023-10-21  20:03:44]	Server Stopped!!
+[2023-10-21  20:03:49]	Server Started!!
+[2023-10-21  20:04:04]	"admin" took print for reval for 19R11A05N8 from 
+[2023-10-21  20:04:14]	"admin"  has Reval Registered ${year} - ${sem} for 19R11A05N8 from 
+[2023-10-21  20:04:39]	Server Stopped!!
+[2023-10-21  20:04:45]	Server Started!!
+[2023-10-21  20:05:38]	"admin" took print for reval for 19R11A05N8 from 
+[2023-10-21  20:05:43]	"admin"  has Reval Registered ${year} - ${sem} for 19R11A05N8 from 
+[2023-10-21  20:45:43]	Server Stopped!!
+[2023-10-21  20:45:47]	Server Started!!
+[2023-10-21  20:47:32]	Server Started!!
+[2023-10-21  20:47:35]	"admin" downloaded supply from 
+[2023-10-21  20:52:26]	Server Stopped!!
+[2023-10-21  20:52:31]	Server Started!!
+[2023-10-21  20:52:45]	"admin" downloaded supply from 
+[2023-10-21  21:07:49]	"admin" uploaded  Paid Supply Supple Registered.csv from 
+[2023-10-21  21:08:01]	"admin" uploaded  Paid Reval Supple Registered.csv from 
+[2023-10-21  23:01:08]	Server Stopped!!
+[2023-10-21  23:01:12]	Server Started!!
+[2023-10-21  23:01:34]	Server Stopped!!
+[2023-10-21  23:01:41]	Server Started!!
+[2023-10-21  23:09:11]	Server Stopped!!
+[2023-10-21  23:09:15]	Server Started!!
+[2023-10-21  23:09:26]	Server Stopped!!
+[2023-10-21  23:09:29]	Server Started!!
+[2023-10-21  23:09:36]	Server Stopped!!
+[2023-10-21  23:09:38]	Server Started!!
+[2023-10-21  23:10:16]	Server Stopped!!
+[21-Oct-2023 11:10:19 PM]	Server Started!!
+[21-Oct-2023 11:19:06 PM]	"admin" uploaded  CBT CBT.csv from 
+[21-Oct-2023 11:22:32 PM]	"admin" deleted details from print reval for21R15A0225 from 
+[21-Oct-2023 11:23:31 PM]	"admin" took print for reval for 21R15A0225 from 
+[21-Oct-2023 11:42:58 PM]	"admin" took print for reval for 21R15A0225 from 
+[21-Oct-2023 11:43:08 PM]	"admin"  has Reval Registered ${year} - ${sem} for 21R15A0225 from 
+[21-Oct-2023 11:43:20 PM]	"admin" took print for reval for 19R11A05N8 from 
+[21-Oct-2023 11:43:28 PM]	"admin"  has Reval Registered ${year} - ${sem} for 19R11A05N8 from 
+[21-Oct-2023 11:43:50 PM]	"admin" took print for supple for 21R15A0223 from 
+[21-Oct-2023 11:44:18 PM]	"admin" has registered Supply for 21R15A0223 from 
+[21-Oct-2023 11:46:31 PM]	Server Stopped!!
+[21-Oct-2023 11:46:34 PM]	Server Started!!
+[21-Oct-2023 11:50:10 PM]	Server Stopped!!
+[21-Oct-2023 11:50:15 PM]	Server Started!!
+[22-Oct-2023 12:01:23 AM]	Server Stopped!!
+[22-Oct-2023 12:01:27 AM]	Server Started!!
+[22-Oct-2023 12:01:56 AM]	Server Stopped!!
+[22-Oct-2023 12:01:59 AM]	Server Started!!
+[22-Oct-2023 12:02:16 AM]	Server Stopped!!
+[22-Oct-2023 12:02:19 AM]	Server Started!!
+[22-Oct-2023 12:03:49 AM]	Server Stopped!!
+[22-Oct-2023 12:03:52 AM]	Server Started!!
+[22-Oct-2023 12:04:06 AM]	Server Stopped!!
+[22-Oct-2023 12:04:10 AM]	Server Started!!
+[22-Oct-2023 12:06:26 AM]	Server Stopped!!
+[22-Oct-2023 12:06:30 AM]	Server Started!!
+[22-Oct-2023 12:09:02 AM]	Server Stopped!!
+[22-Oct-2023 12:09:07 AM]	Server Started!!
+[22-Oct-2023 12:09:40 AM]	Server Started!!
+[22-Oct-2023 05:32:50 PM]	Server Stopped!!
+[22-Oct-2023 05:32:57 PM]	Server Started!!
+[22-Oct-2023 05:33:43 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 05:42:31 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 05:43:23 PM]	"admin"  has logged in from 
+[22-Oct-2023 05:43:44 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 05:44:27 PM]	"admin"  has logged in from 
+[22-Oct-2023 05:44:36 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 05:44:54 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 05:46:26 PM]	"admin"  has logged in from 
+[22-Oct-2023 05:46:38 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 05:46:46 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 05:47:09 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 05:47:16 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 05:48:22 PM]	"admin"  has logged in from 
+[22-Oct-2023 05:48:34 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 05:48:41 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 05:57:07 PM]	"admin"  has logged in from 
+[22-Oct-2023 05:57:24 PM]	"admin"  has logged in from 
+[22-Oct-2023 05:57:39 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 05:57:49 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 05:59:08 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 05:59:31 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 05:59:37 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:01:32 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:02:33 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:02:42 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:02:56 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:06:44 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:07:01 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:07:08 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:12:29 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:12:45 PM]	"admin"  has logged in from 
+[22-Oct-2023 06:13:05 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:13:56 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:14:01 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:16:27 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:16:34 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:17:38 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:17:44 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:18:51 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:19:07 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:19:46 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:21:35 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:21:58 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:32:55 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:33:14 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:33:20 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:34:24 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:34:29 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:34:49 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:34:55 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:35:11 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:35:17 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:36:00 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:36:07 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:37:21 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:55:56 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 06:56:28 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 06:56:43 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 07:03:26 PM]	"admin" deleted values from print CBT for 1234567890 from 
+[22-Oct-2023 07:07:50 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 07:19:34 PM]	"admin" has CBT Registered for 1234567890 from 
+[22-Oct-2023 07:21:07 PM]	"admin" took print for reval for 19R11A05N8 from 
+[22-Oct-2023 07:21:20 PM]	"admin"  has Reval Registered ${year} - ${sem} for 19R11A05N8 from 
+[22-Oct-2023 07:21:37 PM]	"admin" took print for reval for 21R15A0225 from 
+[22-Oct-2023 07:22:56 PM]	"admin" deleted details from print reval for21R15A0225 from 
+[22-Oct-2023 07:24:10 PM]	"admin" took print for reval for 19R11A05N8 from 
+[22-Oct-2023 07:24:26 PM]	"admin"  has Reval Registered ${year} - ${sem} for 19R11A05N8 from 
+[22-Oct-2023 07:26:08 PM]	"admin" took print for reval for 19R11A05N8 from 
+[22-Oct-2023 07:27:06 PM]	"admin"  has logged in from 
+[22-Oct-2023 07:33:56 PM]	"admin"  has Reval Registered ${year} - ${sem} for 19R11A05N8 from 
+[22-Oct-2023 07:34:11 PM]	"admin" took print for reval for 21R15A0225 from 
+[22-Oct-2023 07:34:50 PM]	"admin" deleted details from print reval for21R15A0225 from 
+[22-Oct-2023 07:35:09 PM]	"admin" took print for reval for 21R15A0225 from 
+[22-Oct-2023 07:35:14 PM]	"admin"  has Reval Registered ${year} - ${sem} for 21R15A0225 from 
+[22-Oct-2023 07:38:23 PM]	Server Stopped!!
+[22-Oct-2023 07:38:27 PM]	Server Started!!
+[22-Oct-2023 07:38:33 PM]	"admin" downloaded reval from 
+[22-Oct-2023 07:39:39 PM]	Server Stopped!!
+[22-Oct-2023 07:39:43 PM]	Server Started!!
+[22-Oct-2023 07:43:52 PM]	"admin" downloaded supply from 
+[22-Oct-2023 07:50:29 PM]	Server Stopped!!
+[22-Oct-2023 07:50:32 PM]	Server Started!!
+[22-Oct-2023 07:51:17 PM]	Server Started!!
+[22-Oct-2023 07:51:21 PM]	"admin" downloaded reval from 
+[22-Oct-2023 07:51:54 PM]	"admin" downloaded reval from 
+[22-Oct-2023 07:52:04 PM]	"admin" downloaded reval from 
+[22-Oct-2023 07:52:43 PM]	"admin" downloaded reval from 
+[22-Oct-2023 07:52:55 PM]	"admin" downloaded supply from 
+[22-Oct-2023 07:53:05 PM]	"admin" downloaded supply from 
+[22-Oct-2023 07:54:28 PM]	"admin" downloaded CBT from 
+[22-Oct-2023 07:54:34 PM]	"admin" downloaded CBT from 
+[22-Oct-2023 09:20:15 PM]	"admin" uploaded  Paid Supply Complete Supply Registered 22_Oct_23.csv from 
+[22-Oct-2023 09:20:57 PM]	"admin" uploaded  Paid Reval Complete Reval Registered 22_Oct_23.csv from 
+[22-Oct-2023 09:21:34 PM]	"admin" uploaded  Paid CBT Complete CBT Registered 22_Oct_23.csv from 
+[22-Oct-2023 09:29:04 PM]	"admin" uploaded  Paid Supply Complete CBT Registered 22_Oct_23.csv from 
+[22-Oct-2023 09:29:30 PM]	"admin" uploaded  Paid CBT Complete CBT Registered 22_Oct_23.csv from 
+[22-Oct-2023 09:30:45 PM]	Server Stopped!!
+[22-Oct-2023 09:30:49 PM]	Server Started!!
+[22-Oct-2023 09:31:14 PM]	"admin" uploaded  Paid CBT Complete CBT Registered 22_Oct_23.csv from 
+[22-Oct-2023 09:32:17 PM]	Server Stopped!!
+[22-Oct-2023 09:32:19 PM]	Server Started!!
+[22-Oct-2023 09:32:47 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 09:38:59 PM]	"admin" has CBT Registered for 1234567890 from 
+[22-Oct-2023 09:39:50 PM]	"admin" took print for CBT for 1234567890 from 
+[22-Oct-2023 09:39:54 PM]	"admin" has CBT Registered for 1234567890 from 
+[22-Oct-2023 09:39:58 PM]	"admin" downloaded CBT from 
+[22-Oct-2023 09:45:22 PM]	"admin" downloaded CBT from 
+[22-Oct-2023 09:46:15 PM]	"admin" took print for reval for 19R11A05N8 from 
+[22-Oct-2023 09:46:19 PM]	"admin"  has Reval Registered ${year} - ${sem} for 19R11A05N8 from 
+[22-Oct-2023 09:46:46 PM]	"admin" took print for reval for 19R11A05N8 from 
+[22-Oct-2023 09:46:50 PM]	"admin"  has Reval Registered ${year} - ${sem} for 19R11A05N8 from 
+[22-Oct-2023 09:47:07 PM]	"admin" took print for reval for 21R15A0225 from 
+[22-Oct-2023 09:47:09 PM]	"admin"  has Reval Registered ${year} - ${sem} for 21R15A0225 from 
+[22-Oct-2023 09:47:36 PM]	"admin" downloaded reval from 
+[22-Oct-2023 09:47:53 PM]	"admin" uploaded  Paid Supply Complete CBT Registered 22_Oct_23 (9_45_PM).csv from 
+[22-Oct-2023 09:48:07 PM]	"admin" uploaded  Paid Supply Complete Reval Registered 22_Oct_23 (9_47_PM).csv from 
+[22-Oct-2023 09:48:51 PM]	"admin" uploaded  Paid Reval Complete Reval Registered 22_Oct_23 (9_47_PM).csv from 
+[22-Oct-2023 09:49:02 PM]	"admin" uploaded  Paid CBT Complete CBT Registered 22_Oct_23 (9_45_PM).csv from 
+[22-Oct-2023 09:49:21 PM]	"admin" uploaded  Paid CBT Complete CBT Registered 22_Oct_23 (9_45_PM).csv from 
+[22-Oct-2023 09:49:40 PM]	"admin" uploaded  Paid CBT Complete Reval Registered 22_Oct_23 (9_47_PM).csv from 
+[22-Oct-2023 09:49:48 PM]	"admin" uploaded  Paid Reval Complete Reval Registered 22_Oct_23 (9_47_PM).csv from 
+[22-Oct-2023 09:53:25 PM]	"admin" uploaded  Paid Reval Complete Reval Registered 22_Oct_23 (9_47_PM).csv from 
+[22-Oct-2023 10:10:05 PM]	"admin" uploaded  Paid Reval Complete Reval Registered 22_Oct_23 (9_47_PM).csv from 
+[22-Oct-2023 10:20:38 PM]	"admin" uploaded  Paid Reval Complete Reval Registered 22_Oct_23 (9_47_PM).csv from 
+[22-Oct-2023 10:21:57 PM]	"admin" added new user developer developer from 
+[22-Oct-2023 10:22:00 PM]	"admin"  has logged in from 
+[22-Oct-2023 10:22:21 PM]	"admin" deleted user "developer" from 
+[22-Oct-2023 10:22:47 PM]	"admin"  has logged in from 
+[22-Oct-2023 10:23:21 PM]	"admin" updated costs 
+[22-Oct-2023 10:23:55 PM]	"admin" updated fines 
