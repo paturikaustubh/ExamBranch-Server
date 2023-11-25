@@ -729,6 +729,7 @@ app.post("/printSupply", (req, res) => {
   const G = req.body.G;
   const H = req.body.H;
   const ip = req.ip.slice(7);
+  const { userName } = req.body;
 
   A.forEach((element) => {
     db.query(
@@ -740,7 +741,7 @@ app.post("/printSupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,1, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,1, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 console.log(err);
@@ -762,7 +763,7 @@ app.post("/printSupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,2, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,2, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -785,7 +786,7 @@ app.post("/printSupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,1, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,1, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 console.log(err);
@@ -808,7 +809,7 @@ app.post("/printSupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,2, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,2, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -830,7 +831,7 @@ app.post("/printSupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,1, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,1, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -852,7 +853,7 @@ app.post("/printSupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,2, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,2, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -874,7 +875,7 @@ app.post("/printSupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,1, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,1, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -896,7 +897,7 @@ app.post("/printSupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,2, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,2, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -924,6 +925,7 @@ app.post("/Registersupply", (req, res) => {
   const G = req.body.G;
   const H = req.body.H;
   var ip = req.ip.slice(7);
+  const { userName } = req.body;
 
   A.forEach((element) => {
     db.query(
@@ -935,7 +937,7 @@ app.post("/Registersupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,1, curdate(), (select userName from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,1, curdate(), "${userName}")`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -957,7 +959,7 @@ app.post("/Registersupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,2, curdate(), (select userName from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,2, curdate(), "${userName}")`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -979,7 +981,7 @@ app.post("/Registersupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,1, curdate(), (select userName from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,1, curdate(), "${userName}")`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -1001,7 +1003,7 @@ app.post("/Registersupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,2, curdate(), (select userName from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,2, curdate(), "${userName}")`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -1023,7 +1025,7 @@ app.post("/Registersupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,1, curdate(), (select userName from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,1, curdate(), "${userName}")`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -1045,7 +1047,7 @@ app.post("/Registersupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,2, curdate(), (select userName from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,2, curdate(), "${userName}")`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -1067,7 +1069,7 @@ app.post("/Registersupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,1, curdate(), (select userName from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,1, curdate(), "${userName}")`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -1089,7 +1091,7 @@ app.post("/Registersupply", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,2, curdate(), (select userName from userip where ip = "${ip}"))`,
+            `insert ignore into paidsupply(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,2, curdate(), "${userName}")`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2012,6 +2014,7 @@ app.post("/Registerreval", (req, res) => {
   const G = req.body.G;
   const H = req.body.H;
   const k = req.body.k;
+  const { userName } = req.body;
   var ip = req.ip.slice(7);
   A.forEach((element) => {
     let reg = "";
@@ -2028,7 +2031,7 @@ app.post("/Registerreval", (req, res) => {
         // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",1,1, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",1,1, curdate(), "${subName}","${reg}", "${userName}")`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2054,7 +2057,7 @@ app.post("/Registerreval", (req, res) => {
         // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",1,2, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",1,2, curdate(), "${subName}","${reg}", "${userName}")`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2080,7 +2083,7 @@ app.post("/Registerreval", (req, res) => {
         // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",2,1, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",2,1, curdate(), "${subName}","${reg}", "${userName}")`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2106,7 +2109,7 @@ app.post("/Registerreval", (req, res) => {
         // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",2,2, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",2,2, curdate(), "${subName}","${reg}", "${userName}")`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2132,7 +2135,7 @@ app.post("/Registerreval", (req, res) => {
         // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",3,1, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",3,1, curdate(), "${subName}","${reg}", "${userName}")`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2158,7 +2161,7 @@ app.post("/Registerreval", (req, res) => {
         // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",3,2, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",3,2, curdate(), "${subName}","${reg}", "${userName}")`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2184,7 +2187,7 @@ app.post("/Registerreval", (req, res) => {
         // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",4,1, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",4,1, curdate(), "${subName}","${reg}", "${userName}")`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2209,7 +2212,7 @@ app.post("/Registerreval", (req, res) => {
         // console.log(subName)
 
         db.query(
-          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",4,2, curdate(), "${subName}","${reg}", (select userName from userip where ip = "${ip}"))`,
+          `insert ignore into paidreevaluation(rollNo,subCode,acYear,sem, regDate, subName, stat, user) values("${rno}","${element}",4,2, curdate(), "${subName}","${reg}", "${userName}")`,
           (err, _result) => {
             if (err) {
               res.send({ err: err });
@@ -2237,6 +2240,7 @@ app.post("/printReval", (req, res) => {
   const G = req.body.G;
   const H = req.body.H;
   const ip = req.ip.slice(7);
+  const { userName } = req.body;
 
   A.forEach((element) => {
     db.query(
@@ -2248,7 +2252,7 @@ app.post("/printReval", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,1, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,1, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 console.log(err);
@@ -2270,7 +2274,7 @@ app.post("/printReval", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,2, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",1,2, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2292,7 +2296,7 @@ app.post("/printReval", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,1, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,1, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2314,7 +2318,7 @@ app.post("/printReval", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,2, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",2,2, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2336,7 +2340,7 @@ app.post("/printReval", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,1, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,1, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2358,7 +2362,7 @@ app.post("/printReval", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,2, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",3,2, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2380,7 +2384,7 @@ app.post("/printReval", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,1, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,1, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -2402,7 +2406,7 @@ app.post("/printReval", (req, res) => {
         if (result) {
           let subName = result[0]["subName"];
           db.query(
-            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,2, curdate(), (select userName from userip where ip = "${ip}"));`,
+            `insert ignore into printreval(rollNo,subCode,subName,acYear,sem, regDate, user) values("${rno}","${element}","${subName}",4,2, curdate(), "${userName}");`,
             (err, _result) => {
               if (err) {
                 res.send({ err: err });
@@ -3018,10 +3022,11 @@ app.post(`/printCbt`, (req, res) => {
   const branch = req.body.branch;
   var ip = req.ip.slice(7);
   var count = 0;
+  const { userName } = req.body;
 
   subCode.forEach((e) => {
     db.query(
-      `insert ignore into printcbt(rollNo, subCode, acYear, sem, subName, regDate, branch, user)values("${rno}","${e}","${acYear}","${sem}","${subName[count]}", curdate(),"${branch}", (select userName from userip where ip = "${ip}"));`,
+      `insert ignore into printcbt(rollNo, subCode, acYear, sem, subName, regDate, branch, user)values("${rno}","${e}","${acYear}","${sem}","${subName[count]}", curdate(),"${branch}", "${userName}");`,
       (err, _result) => {
         if (err) {
           res.send({ err: true });
@@ -3046,10 +3051,11 @@ app.post("/CbtRegister", (req, res) => {
   const branch = req.body.branch;
   var ip = req.ip.slice(7);
   let count = 0;
+  const { userName } = req.body;
 
   subCode.forEach((e) => {
     db.query(
-      `insert ignore into paidcbt(rollNo, subCode, acYear, sem, subName, regDate, branch, user)values("${rno}","${e}","${acYear}","${sem}","${subName[count]}", curdate(),"${branch}", (select userName from userip where ip = "${ip}"))`,
+      `insert ignore into paidcbt(rollNo, subCode, acYear, sem, subName, regDate, branch, user)values("${rno}","${e}","${acYear}","${sem}","${subName[count]}", curdate(),"${branch}", "${userName}")`,
       (err) => {
         if (err) {
           res.status(500).send("errrr" + err);
