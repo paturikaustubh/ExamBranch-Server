@@ -624,3 +624,168 @@
 [25-Nov-2023 12:02:47 PM]	Server Started!!
 [25-Nov-2023 12:04:22 PM]	Server Started!!
 [25-Nov-2023 12:05:10 PM]	Server Started!!
+[23-Dec-2023 12:55:17 PM]	Server Started!!
+[23-Dec-2023 12:59:01 PM]	Server Stopped!!
+[23-Dec-2023 12:59:14 PM]	Server Started!!
+[23-Dec-2023 01:01:02 PM]	"admin"  has logged in from 
+[23-Dec-2023 01:05:20 PM]	"admin"  has logged in from 
+[23-Dec-2023 01:08:31 PM]	Server Started!!
+[23-Dec-2023 02:12:49 PM]	Server Started!!
+[23-Dec-2023 02:12:53 PM]	Server Started!!
+[23-Dec-2023 02:15:49 PM]	"admin" restored detabase from 
+[23-Dec-2023 02:16:38 PM]	"admin" updated fines 
+[23-Dec-2023 02:17:17 PM]	"admin"  has logged in from 
+[23-Dec-2023 02:18:37 PM]	"admin" took print for supple for 21R15A0225 from 
+[23-Dec-2023 02:18:51 PM]	"admin" has registered Supply for 21R15A0225 from 
+[23-Dec-2023 02:19:21 PM]	"admin" took print for reval for 21R15A0225 from 
+[23-Dec-2023 02:19:36 PM]	"admin"  has Reval Registered ${year} - ${sem} for 21R15A0225 from 
+[23-Dec-2023 02:20:22 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 02:20:25 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 02:20:28 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 02:20:40 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 02:20:42 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 02:20:45 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 02:20:48 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 02:27:18 PM]	"admin" uploaded  CBT CBT.csv from 
+[23-Dec-2023 02:27:33 PM]	"admin"  has logged in from 
+[23-Dec-2023 02:27:51 PM]	"admin"  has logged in from 
+[23-Dec-2023 02:28:20 PM]	"admin" took print for supple for 21R15A0225 from 
+[23-Dec-2023 02:28:34 PM]	"admin" has registered Supply for 21R15A0225 from 
+[23-Dec-2023 02:29:09 PM]	"admin" took print for reval for 21R15A0225 from 
+[23-Dec-2023 02:29:18 PM]	"admin"  has Reval Registered ${year} - ${sem} for 21R15A0225 from 
+[23-Dec-2023 02:34:04 PM]	Server Started!!
+[23-Dec-2023 02:34:12 PM]	"admin"  has logged in from 
+[23-Dec-2023 02:36:05 PM]	Server Started!!
+[23-Dec-2023 02:36:22 PM]	"admin" took print for CBT for 1234567891 from 
+[23-Dec-2023 02:39:45 PM]	Server Started!!
+[23-Dec-2023 02:40:23 PM]	"admin"  has logged in from 
+[23-Dec-2023 02:40:44 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 02:40:46 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 02:40:49 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 02:40:59 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 02:41:02 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 02:41:04 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 02:41:06 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 02:47:01 PM]	"admin"  has logged in from 
+[23-Dec-2023 02:48:56 PM]	"admin"  has logged in from 
+[23-Dec-2023 02:50:25 PM]	"admin" took print for supple for 21R15A0225 from 
+[23-Dec-2023 02:50:34 PM]	"admin" has registered Supply for 21R15A0225 from 
+[23-Dec-2023 02:51:08 PM]	"admin" took print for reval for 21R15A0225 from 
+[23-Dec-2023 02:51:20 PM]	"admin"  has Reval Registered ${year} - ${sem} for 21R15A0225 from 
+[23-Dec-2023 02:57:00 PM]	Server Started!!
+[23-Dec-2023 02:57:38 PM]	"admin" took print for CBT for 21R15A0225 from 
+[23-Dec-2023 03:20:07 PM]	"admin"  has logged in from 
+[23-Dec-2023 03:20:20 PM]	"admin"  has logged in from 
+[23-Dec-2023 03:21:22 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 03:21:24 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 03:21:26 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 03:21:32 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 03:21:34 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 03:21:36 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 03:21:37 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 03:22:18 PM]	"admin" took print for supple for 21R15A0225 from 
+[23-Dec-2023 03:22:26 PM]	"admin" has registered Supply for 21R15A0225 from 
+[23-Dec-2023 03:22:57 PM]	"admin" took print for reval for 21R15A0225 from 
+[23-Dec-2023 03:23:09 PM]	"admin"  has Reval Registered ${year} - ${sem} for 21R15A0225 from 
+[23-Dec-2023 03:23:31 PM]	"admin" took print for CBT for 21R15A0225 from 
+[23-Dec-2023 03:23:37 PM]	"admin" has CBT Registered for 21R15A0225 from 
+[23-Dec-2023 03:24:58 PM]	Server Started!!
+[23-Dec-2023 03:25:02 PM]	Server Started!!
+[23-Dec-2023 03:25:13 PM]	"admin" downloaded supply from 
+[23-Dec-2023 03:25:25 PM]	"admin" downloaded supply report from 
+[23-Dec-2023 03:27:25 PM]	Server Started!!
+[23-Dec-2023 03:27:25 PM]	"admin" Made backup from
+[23-Dec-2023 03:28:14 PM]	"admin" updated costs 
+[23-Dec-2023 03:29:49 PM]	"admin"  has logged in from 
+[23-Dec-2023 03:30:05 PM]	"admin" added new user test test@test from 
+[23-Dec-2023 03:30:19 PM]	"admin"  has logged in from 
+[23-Dec-2023 03:30:37 PM]	"admin"  has logged in from 
+[23-Dec-2023 03:30:47 PM]	"admin" deleted user "test" from 
+[23-Dec-2023 03:30:55 PM]	"admin" deleted user "admins" from 
+[23-Dec-2023 03:31:25 PM]	"admin"  has logged in from 
+[23-Dec-2023 08:51:30 PM]	Server Started!!
+[23-Dec-2023 08:52:57 PM]	"admin"  has logged in from 
+[23-Dec-2023 08:54:00 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 08:54:02 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 08:54:04 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 08:54:09 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 08:54:10 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 08:54:12 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 08:54:13 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 08:54:19 PM]	"admin" deleted details from paidcbt for 21R15A0225 from 
+[23-Dec-2023 08:54:22 PM]	"admin" deleted details from paidcbt for 21R15A0225 from 
+[23-Dec-2023 08:54:23 PM]	"admin" deleted details from paidcbt for 21R15A0225 from 
+[23-Dec-2023 08:54:25 PM]	"admin" deleted details from paidcbt for 21R15A0225 from 
+[23-Dec-2023 08:54:27 PM]	"admin" deleted details from paidcbt for 21R15A0225 from 
+[23-Dec-2023 08:54:42 PM]	"admin"  has logged in from 
+[23-Dec-2023 08:55:42 PM]	"admin" took print for supple for 21R15A0225 from 
+[23-Dec-2023 08:55:47 PM]	"admin" has registered Supply for 21R15A0225 from 
+[23-Dec-2023 08:56:11 PM]	"admin" took print for reval for 21R15A0225 from 
+[23-Dec-2023 08:56:20 PM]	"admin"  has Reval Registered ${year} - ${sem} for 21R15A0225 from 
+[23-Dec-2023 08:56:45 PM]	"admin" took print for CBT for 21R15A0225 from 
+[23-Dec-2023 08:56:50 PM]	"admin" has CBT Registered for 21R15A0225 from 
+[23-Dec-2023 08:57:01 PM]	"admin" downloaded supply from 
+[23-Dec-2023 08:57:09 PM]	"admin" downloaded supply report from 
+[23-Dec-2023 08:57:59 PM]	"admin" Made backup from
+[23-Dec-2023 08:58:37 PM]	"admin" updated costs 
+[23-Dec-2023 08:59:48 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:00:02 PM]	"admin" added new user test test@test from 
+[23-Dec-2023 09:00:16 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:00:31 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:00:40 PM]	"admin" deleted user "test" from 
+[23-Dec-2023 09:26:53 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:27:32 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 09:27:33 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 09:27:34 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 09:27:40 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 09:27:41 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 09:27:43 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 09:27:43 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 09:27:48 PM]	"admin" deleted details from paidcbt for 21R15A0225 from 
+[23-Dec-2023 09:27:49 PM]	"admin" deleted details from paidcbt for 21R15A0225 from 
+[23-Dec-2023 09:27:51 PM]	"admin" deleted details from paidcbt for 21R15A0225 from 
+[23-Dec-2023 09:27:52 PM]	"admin" deleted details from paidcbt for 21R15A0225 from 
+[23-Dec-2023 09:28:14 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:29:15 PM]	"admin" took print for supple for 21R15A0225 from 
+[23-Dec-2023 09:29:21 PM]	"admin" has registered Supply for 21R15A0225 from 
+[23-Dec-2023 09:29:44 PM]	"admin" took print for reval for 21R15A0225 from 
+[23-Dec-2023 09:29:52 PM]	"admin"  has Reval Registered ${year} - ${sem} for 21R15A0225 from 
+[23-Dec-2023 09:30:19 PM]	"admin" took print for CBT for 21R15A0225 from 
+[23-Dec-2023 09:30:23 PM]	"admin" has CBT Registered for 21R15A0225 from 
+[23-Dec-2023 09:30:34 PM]	"admin" downloaded supply from 
+[23-Dec-2023 09:30:43 PM]	"admin" downloaded supply report from 
+[23-Dec-2023 09:31:31 PM]	"admin" Made backup from
+[23-Dec-2023 09:32:08 PM]	"admin" updated costs 
+[23-Dec-2023 09:33:22 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:33:37 PM]	"admin" added new user test test@test from 
+[23-Dec-2023 09:33:49 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:34:02 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:34:11 PM]	"admin" deleted user "test" from 
+[23-Dec-2023 09:36:23 PM]	Server Started!!
+[23-Dec-2023 09:37:11 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:39:21 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 09:39:23 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 09:39:36 PM]	"admin" deleted details from paidsupply for 21R15A0225 from 
+[23-Dec-2023 09:39:41 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 09:39:42 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 09:39:42 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 09:39:44 PM]	"admin" deleted details from paidreevaluation for 21R15A0225 from 
+[23-Dec-2023 09:39:55 PM]	"admin" deleted details from paidcbt for 21R15A0225 from 
+[23-Dec-2023 09:39:56 PM]	"admin" deleted details from paidcbt for 21R15A0225 from 
+[23-Dec-2023 09:39:57 PM]	"admin" deleted details from paidcbt for 21R15A0225 from 
+[23-Dec-2023 09:40:20 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:41:23 PM]	"admin" took print for supple for 21R15A0225 from 
+[23-Dec-2023 09:41:29 PM]	"admin" has registered Supply for 21R15A0225 from 
+[23-Dec-2023 09:41:53 PM]	"admin" took print for reval for 21R15A0225 from 
+[23-Dec-2023 09:42:18 PM]	"admin" took print for CBT for 21R15A0225 from 
+[23-Dec-2023 09:42:22 PM]	"admin" has CBT Registered for 21R15A0225 from 
+[23-Dec-2023 09:42:32 PM]	"admin" downloaded supply from 
+[23-Dec-2023 09:42:40 PM]	"admin" downloaded supply report from 
+[23-Dec-2023 09:43:07 PM]	"admin" Made backup from
+[23-Dec-2023 09:43:37 PM]	"admin" updated costs 
+[23-Dec-2023 09:44:56 PM]	"admin"  has Reval Registered ${year} - ${sem} for 21R15A0225 from 
+[23-Dec-2023 09:45:42 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:45:58 PM]	"admin" added new user test test@test from 
+[23-Dec-2023 09:46:10 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:46:24 PM]	"admin"  has logged in from 
+[23-Dec-2023 09:46:34 PM]	"admin" deleted user "test" from 

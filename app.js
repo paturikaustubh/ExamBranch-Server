@@ -2434,6 +2434,7 @@ app.post("/Login", (req, res) => {
         res.send({ err: err });
         console.log(err);
       } else {
+        console.log(result);
         if (result.length === 1) {
           const hash = md5(password);
           if (hash === result[0]["password"]) {
@@ -3029,7 +3030,7 @@ app.post(`/printCbt`, (req, res) => {
       `insert ignore into printcbt(rollNo, subCode, acYear, sem, subName, regDate, branch, user)values("${rno}","${e}","${acYear}","${sem}","${subName[count]}", curdate(),"${branch}", "${userName}");`,
       (err, _result) => {
         if (err) {
-          res.send({ err: true });
+          // res.send({ err: true });
           console.log(err);
         }
       }
