@@ -30,4 +30,4 @@ UpdateServer.bat
 *.txt
 *SyncServer.bat
 *UpdateServer.bat
-log.txt
+*.txt

@@ -1607,7 +1607,7 @@ app.post("/Revalsearch", (req, res) => {
                   value = value + result.length;
                   availableSems.push({
                     code: "C",
-                    sem: "-1",
+                    sem: "2-1",
                   });
                 }
               }
